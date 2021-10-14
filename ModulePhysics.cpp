@@ -23,183 +23,35 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 ModulePhysics::~ModulePhysics()
 {
 }
-/*
-int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-};
 
-ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-*/
 bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 
-	// Definition of the arrays
-
-	b2Vec2 Background[57] = {
-		{107, 26},
-		{27, 106},
-		{18, 118},
-		{14, 126 },
-		{12, 133 },
-		{11, 325 },
-		{24, 339 },
-		{24, 346 },
-		{20, 349 },
-		{4, 365 },
-		{4, 455 },
-		{6, 460 },
-		{10, 463},
-		{92, 498 },
-		{94, 503 },
-		{94, 513 },
-		{93, 554 },
-		{201, 556 },
-		{197, 512 },
-		{198, 498 },
-		{290, 456 },
-		{295, 451 },
-		{297, 440 },
-		{297, 361 },
-		{265, 329 },
-		{264, 297 },
-		{290, 250 },
-		{291, 180 },
-		{262, 71 },
-		{264, 65 },
-		{270, 64 },
-		{276, 73 },
-		{284, 87 },
-		{291, 100 },
-		{294, 112 },
-		{296, 123 },
-		{298, 136 },
-		{299, 149 },
-		{299, 166 },
-		{299, 476 },
-		{319, 476 },
-		{318, 140 },
-		{316, 117 },
-		{311, 99 },
-		{302, 76 },
-		{291, 59 },
-		{275, 42 },
-		{261, 30 },
-		{243, 19 },
-		{226, 11 },
-		{203, 5 },
-		{183, 3 },
-		{161, 5 },
-		{144, 9 },
-		{125, 16 },
-		{112, 22 },
-		{94, 37 }
-	};
-
-	b2Vec2 Obj01[7] = {
-		{245, 268},
-		{245, 268 },
-		{265, 228},
-		{273, 233 },
-		{254, 271 },
-		{254, 271 },
-		{245, 268 }
-	};
-
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
 
-	// Creation of the map ///////////////////////////////////////////////////////////////////////////////
-	// main static object
-
+	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	int x =0;
-	int y = 0;
+	// big static circle as "ground" in the middle of the screen
+	int x = SCREEN_WIDTH / 2;
+	int y = SCREEN_HEIGHT / 1.5f;
+	int diameter = SCREEN_WIDTH / 2;
 
 	b2BodyDef body;
 	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)); 
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-	b2Body* map = world->CreateBody(&body);
+	b2Body* big_ball = world->CreateBody(&body);
 
-	b2ChainShape shape;
-	b2Vec2 wVertices[57];
-
-	for (int i =0;i<57;i++)
-	{
-		wVertices[i] = PIXEL_TO_METERS(Background[i]);
-	}
-
-	shape.CreateChain(wVertices, 57);
-	
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	map->CreateFixture(&fixture);
-
-	// Static intern objects
-	///
-	b2BodyDef intern01;
-	Object01 = world->CreateBody(&intern01);
-
-	x = 0;
-	y = 0;
-
-	b2BodyDef body01;
-	body01.type = b2_staticBody;
-	body01.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* obj01 = world->CreateBody(&body01);
-
-	b2ChainShape shape01;
-	b2Vec2 Vertices01[7];
-
-	for (int i = 0; i < 7; i++)
-	{
-		Vertices01[i] = PIXEL_TO_METERS(Obj01[i]);
-	}
-
-	shape01.CreateChain(Vertices01, 7);
-
-
-	b2FixtureDef fixture01; /// Unknown error
-	fixture01.shape = &shape01;
-	obj01->CreateFixture(&fixture);
-	///
-
+	big_ball->CreateFixture(&fixture);
 
 	return true;
 }
