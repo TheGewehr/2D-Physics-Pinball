@@ -5,6 +5,7 @@
 
 # NOT ignore Box2D library files 
 !\Box2D
+!\Box2D.zip
 
 # User-specific files
 *.rsuser
