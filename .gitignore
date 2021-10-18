@@ -4,8 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # NOT ignore Box2D library files 
-!\Box2D\libx86\Debug\Box2D.lib
-!\Box2D\libx86\Release\Box2D.lib
+!\Box2D
 
 # User-specific files
 *.rsuser
