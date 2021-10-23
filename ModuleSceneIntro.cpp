@@ -30,11 +30,21 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); // loose aball audio
+	win_fx = App->audio->LoadFx("pinball/win.wav"); // win audio
+
 	map = App->textures->Load("pinball/map.png");
 
 	
 
-	sensor = App->physics->CreateRectangleSensor(308, 476, 10, 10);
+	sensor_loss = App->physics->CreateRectangleSensor(300,1090, 220, 10);
+	sensor_loss->id = 1;
+
+	sensor_win = App->physics->CreateRectangleSensor(90, 320, 20, 20);
+	sensor_win->id = 2;
+
+	//sensor_win = App->physics->CreateRectangleSensor(90, 320, 20, 20);
+	//sensor_win->id = 2;
 
 	return ret;
 }
@@ -180,20 +190,30 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
-
-	App->audio->PlayFx(bonus_fx);
-
 	/*
-	if(bodyA)
+	b2_staticBody = 0,
+		b2_kinematicBody,
+		b2_dynamicBody
+	*/
+	
+	if (bodyB==nullptr)
 	{
-		bodyA->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
+		
 	}
-
-	if(bodyB)
+	else
 	{
-		bodyB->GetPosition(x, y);
-		App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
+		if ((bodyA->id == 0) && (bodyB->id == 1))
+		{
+			
+			App->audio->PlayFx(ball_lost_fx);
+			bodyA->body->SetAwake(false); //TODO delete the ball and Loose a life
+
+		}
+		if ((bodyA->id == 0) && (bodyB->id == 2))
+		{
+			App->audio->PlayFx(win_fx);
+			bodyA->body->SetAwake(false); //TODO delete the ball and send to win screen
+		}
+	}
+	
 }

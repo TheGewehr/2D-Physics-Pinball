@@ -22,7 +22,8 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 
-	PhysBody* sensor;
+	PhysBody* sensor_loss;
+	PhysBody* sensor_win;
 	bool sensed;
 
 	SDL_Texture* circle;
@@ -31,6 +32,10 @@ public:
 	SDL_Texture* map;
 
 	uint bonus_fx;
+	uint ball_lost_fx;
+	uint win_fx;
+	//uint loose_fx;
+
 	p2Point<int> ray;
 	bool ray_on;
 };
