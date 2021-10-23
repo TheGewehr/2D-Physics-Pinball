@@ -30,7 +30,7 @@ bool ModuleSceneIntro::Start()
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); // loose aball audio
+	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); // loose a ball audio
 	win_fx = App->audio->LoadFx("pinball/win.wav"); // win audio
 
 	map = App->textures->Load("pinball/map.png");
@@ -43,8 +43,8 @@ bool ModuleSceneIntro::Start()
 	sensor_win = App->physics->CreateRectangleSensor(90, 320, 20, 20);
 	sensor_win->id = 2;
 
-	//sensor_win = App->physics->CreateRectangleSensor(90, 320, 20, 20);
-	//sensor_win->id = 2;
+	sensor_ricochet = App->physics->CreateCircleSensor(100, 420, 20);
+	sensor_ricochet->id= 3;
 
 	return ret;
 }
@@ -213,6 +213,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			App->audio->PlayFx(win_fx);
 			bodyA->body->SetAwake(false); //TODO delete the ball and send to win screen
+		}
+		if ((bodyA->id == 0) && (bodyB->id == 3))
+		{
+			App->audio->PlayFx(bonus_fx);
+			//TODO sum points
+
 		}
 	}
 	

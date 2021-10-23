@@ -24,6 +24,7 @@ public:
 
 	PhysBody* sensor_loss;
 	PhysBody* sensor_win;
+	PhysBody* sensor_ricochet;
 	bool sensed;
 
 	SDL_Texture* circle;
