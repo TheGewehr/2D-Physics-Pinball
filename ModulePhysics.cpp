@@ -437,7 +437,34 @@ bool ModulePhysics::Start()
 	fixture08.shape = &shape08;
 	obj08->CreateFixture(&fixture08);
 	///
-	
+
+	// Static intern object
+	// 9
+
+	//// Get coordinates of the screen center and radius
+	//x = 00;
+	//y =00;
+	//int diameter = 300;
+	//
+	//
+	//// Create a static body in the middle of the screen
+	//b2BodyDef body;
+	//body.type = b2_staticBody;
+	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	//
+	//// Add this static body to the World
+	//b2Body* ball01 = world->CreateBody(&body);
+	//
+	//// Create a big circle shape
+	//b2CircleShape shape;
+	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
+	//
+	//// Create a fixture and associate the circle to it
+	//b2FixtureDef fixture;
+	//fixture.shape = &shape;
+	//
+	//// Add the ficture (plus shape) to the static body
+	//ball01->CreateFixture(&fixture);
 
 	return true;
 }
