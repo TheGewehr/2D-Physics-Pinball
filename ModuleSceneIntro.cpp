@@ -43,9 +43,13 @@ bool ModuleSceneIntro::Start()
 	sensor_win = App->physics->CreateRectangleSensor(90, 320, 20, 20);
 	sensor_win->id = 2;
 
-	sensor_ricochet = App->physics->CreateCircle(100,100,50); // does not work
-	sensor_ricochet->id= 3;
-	sensor_ricochet->body->SetType(b2_staticBody);
+	ricochet01 = App->physics->CreateCircle(254,270,47); 
+	ricochet01->id= 3;
+	ricochet01->body->SetType(b2_staticBody);
+
+	ricochet01 = App->physics->CreateCircle(368,367, 47); 
+	ricochet01->id = 3;
+	ricochet01->body->SetType(b2_staticBody);
 
 	return ret;
 }
@@ -77,6 +81,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		circles.add(App->physics->CreateCircle(616, 940, 16));
 		circles.getLast()->data->listener = this;
+		
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) // Spawn a ball on the mouse
@@ -208,6 +213,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			
 			App->audio->PlayFx(ball_lost_fx);
 			bodyA->body->SetAwake(false); //TODO delete the ball and Loose a life
+			//bodyA->body.
 
 		}
 		if ((bodyA->id == 0) && (bodyB->id == 2))
@@ -218,6 +224,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if ((bodyA->id == 0) && (bodyB->id == 3))
 		{
 			App->audio->PlayFx(bonus_fx);
+			b2Vec2 direction;
+			direction = (bodyA->body->GetLocalCenter()) - (bodyB->body->GetLocalCenter()) ; // World or local
+			direction = { direction.x * 1,direction.y * 1 };
+			bodyA->body->ApplyLinearImpulse(direction, bodyA->body->GetWorldCenter(), true);
+			//ApplyForce(direction, bodyA->body->GetWorldCenter(), true);
+
 			//TODO sum points
 
 		}
