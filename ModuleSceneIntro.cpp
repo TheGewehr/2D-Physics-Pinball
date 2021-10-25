@@ -35,7 +35,9 @@ bool ModuleSceneIntro::Start()
 
 	map = App->textures->Load("pinball/map.png");
 
-	
+	lives = 3;
+	win_con = false;
+	game_end = false;
 
 	sensor_loss = App->physics->CreateRectangleSensor(300,1090, 220, 10);
 	sensor_loss->id = 1;
@@ -657,12 +659,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			App->audio->PlayFx(ball_lost_fx);
 			bodyA->body->SetAwake(false); //TODO delete the ball and Loose a life
 			//bodyA->body.
-
+			lives -= 1;
 		}
 		if ((bodyA->id == 0) && (bodyB->id == 2))
 		{
 			App->audio->PlayFx(win_fx);
 			bodyA->body->SetAwake(false); //TODO delete the ball and send to win screen
+			win_con = true;
+			game_end = true;
 		}
 		if ((bodyA->id == 0) && (bodyB->id == 3))
 		{

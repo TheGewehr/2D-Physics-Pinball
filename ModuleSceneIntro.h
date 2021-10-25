@@ -44,4 +44,8 @@ public:
 
 	p2Point<int> ray;
 	bool ray_on;
+
+	int lives;
+	bool win_con;
+	bool game_end;
 };
