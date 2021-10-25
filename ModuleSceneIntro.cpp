@@ -246,8 +246,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 1
 
-	b2BodyDef intern01;
-	Object01 = App->physics->AddToWorld(&intern01);
+	//b2BodyDef intern01;
+	//Object01 = App->physics->AddToWorld(&intern01);
 
 	b2BodyDef body01;
 	body01.type = b2_staticBody;
@@ -274,8 +274,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 2
 
-	b2BodyDef intern02;
-	Object02 = App->physics->AddToWorld(&intern02);
+	//b2BodyDef intern02;
+	//Object02 = App->physics->AddToWorld(&intern02);
 
 
 	b2BodyDef body02;
@@ -302,8 +302,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 3
 
-	b2BodyDef intern03;
-	Object02 = App->physics->AddToWorld(&intern03);
+	//b2BodyDef intern03;
+	//Object03 = App->physics->AddToWorld(&intern03);
 
 
 	b2BodyDef body03;
@@ -330,8 +330,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 4
 
-	b2BodyDef intern04;
-	Object04 = App->physics->AddToWorld(&intern04);
+	//b2BodyDef intern04;
+	//Object04 = App->physics->AddToWorld(&intern04);
 
 
 	b2BodyDef body04;
@@ -358,8 +358,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 5
 
-	b2BodyDef intern05;
-	Object05 = App->physics->AddToWorld(&intern05);
+	//b2BodyDef intern05;
+	//Object05 = App->physics->AddToWorld(&intern05);
 
 
 	b2BodyDef body05;
@@ -386,8 +386,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 6
 
-	b2BodyDef intern06;
-	Object06 = App->physics->AddToWorld(&intern06);
+	//b2BodyDef intern06;
+	//Object06 = App->physics->AddToWorld(&intern06);
 
 
 	b2BodyDef body06;
@@ -414,8 +414,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 7
 
-	b2BodyDef intern07;
-	Object07 = App->physics->AddToWorld(&intern07);
+	//b2BodyDef intern07;
+	//Object07 = App->physics->AddToWorld(&intern07);
 
 
 	b2BodyDef body07;
@@ -442,8 +442,8 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 8
 
-	b2BodyDef intern08;
-	Object08 = App->physics->AddToWorld(&intern08);
+	//b2BodyDef intern08;
+	//Object08 = App->physics->AddToWorld(&intern08);
 
 
 	b2BodyDef body08;
@@ -469,8 +469,8 @@ bool ModuleSceneIntro::Start()
 
 	// Static intern object
 	// 9
-	b2BodyDef intern09;
-	Object01 = App->physics->AddToWorld(&intern09);
+	//b2BodyDef intern09;
+	//Object01 = App->physics->AddToWorld(&intern09);
 
 	b2BodyDef body09;
 	body09.type = b2_staticBody;

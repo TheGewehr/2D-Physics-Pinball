@@ -30,15 +30,7 @@ public:
 	bool sensed;
 
 	// Map Objects of Scene Intro
-	b2Body* Object01;
-	b2Body* Object02;
-	b2Body* Object03;
-	b2Body* Object04;
-	b2Body* Object05;
-	b2Body* Object06;
-	b2Body* Object07;
-	b2Body* Object08;
-	b2Body* Object09;
+
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
