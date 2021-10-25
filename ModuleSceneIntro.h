@@ -48,4 +48,6 @@ public:
 	int lives;
 	bool win_con;
 	bool game_end;
+
+	SDL_Rect end_rect;
 };
