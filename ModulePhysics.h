@@ -49,6 +49,9 @@ public:
 	PhysBody* CreateCircleSensor(int x, int y, int radius);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 
+	b2World* GetWorld();
+	b2Body* AddToWorld(b2BodyDef *body);
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
@@ -58,15 +61,5 @@ private:
 	b2World* world;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
-	b2Body* Object01;
-	b2Body* Object02;
-	b2Body* Object03;
-	b2Body* Object04;
-	b2Body* Object05;
-	b2Body* Object06;
-	b2Body* Object07;
-	b2Body* Object08;
-	b2Body* Object09;
-	b2Body* Object10;
-	b2Body* Object11;
+	
 };
