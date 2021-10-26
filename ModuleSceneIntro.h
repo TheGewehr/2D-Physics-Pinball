@@ -65,4 +65,5 @@ public:
 	bool game_end;
 
 	SDL_Rect end_rect;
+	bool spawn_ball;
 };
