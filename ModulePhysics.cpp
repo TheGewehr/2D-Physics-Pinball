@@ -35,7 +35,7 @@ bool ModulePhysics::Start()
 	return true;
 }
 
-// 
+
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
@@ -50,6 +50,7 @@ update_status ModulePhysics::PreUpdate()
 				pb1->listener->OnCollision(pb1, pb2);
 		}
 	}
+
 
 	return UPDATE_CONTINUE;
 }
@@ -191,6 +192,36 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 	return pbody;
 }
+
+void ModulePhysics::CreateSpring(int x, int y)
+{
+	b2DistanceJointDef* the_joint = new b2DistanceJointDef();
+	the_joint->frequencyHz = 1.0f;
+	the_joint->dampingRatio = 1.0f;
+	the_joint->length = PIXEL_TO_METERS(50);
+
+	PhysBody* box_01  = CreateRectangle(x, y + 50, 50, 50);
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(25) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+
+	the_joint->Initialize(box_01->body, b, b2Vec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)), b2Vec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)));
+	the_joint->collideConnected = true;
+	b2DistanceJoint *joint = (b2DistanceJoint*)world->CreateJoint(the_joint);
+	
+}
+
 
 b2World* ModulePhysics::GetWorld()
 {

@@ -38,7 +38,7 @@ bool ModuleSceneIntro::Start()
 	lives = 3;
 	win_con = false;
 	game_end = false;
-
+	spawn_ball = false;
 	end_rect = { 135, 412, 320, 200};
 
 	sensor_loss = App->physics->CreateRectangleSensor(300,1090, 220, 10);
@@ -539,11 +539,11 @@ update_status ModuleSceneIntro::Update()
 			ray.y = App->input->GetMouseY();
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) // Spawn a ball where it should be ath the start
+		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN /*|| spawn_ball == true*/) // Spawn a ball where it should be ath the start
 		{
 			circles.add(App->physics->CreateCircle(616, 940, 16));
 			circles.getLast()->data->listener = this;
-
+			spawn_ball = false;
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) // Spawn a ball on the mouse
@@ -593,6 +593,11 @@ update_status ModuleSceneIntro::Update()
 			ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 		}
 
+		if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+		{
+			App->physics->CreateSpring(App->input->GetMouseX(), App->input->GetMouseY());
+
+		}
 			// Prepare for raycast ------------------------------------------------------
 
 			iPoint mouse;
@@ -691,15 +696,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			bodyA->body->SetAwake(false); //TODO delete the ball and Loose a life
 			//bodyA->body.
 			lives -= 1;
+			spawn_ball = true;
 		}
-		if ((bodyA->id == 0) && (bodyB->id == 2))
+		else if ((bodyA->id == 0) && (bodyB->id == 2))
 		{
 			App->audio->PlayFx(win_fx);
 			bodyA->body->SetAwake(false); //TODO delete the ball and send to win screen
 			win_con = true;
 			game_end = true;
 		}
-		if ((bodyA->id == 0) && (bodyB->id == 3))
+		else if ((bodyA->id == 0) && (bodyB->id == 3))
 		{
 			//App->audio->PlayFx(bonus_fx);
 			int multi = 20;
