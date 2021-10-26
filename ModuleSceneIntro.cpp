@@ -562,10 +562,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	
+
 	App->renderer->Blit(map, 0, 0, nullptr, 1.0f, 0, 0);
-	App->renderer->Blit(fliper_left, 164, 908, nullptr, 1, fliperLeft->body->GetAngle() / DEGTORAD, 30 * SCREEN_SIZE, 25 * SCREEN_SIZE);
-	App->renderer->Blit(fliper_right, 331, 905, nullptr, 1, fliperRight->body->GetAngle() / DEGTORAD, 30 * SCREEN_SIZE, 25 * SCREEN_SIZE);
+	App->renderer->Blit(fliper_left, 164, 908, nullptr, 1, fliperLeft->body->GetAngle() / DEGTORAD, 10, 17);
+	App->renderer->Blit(fliper_right, 331, 905, nullptr, 1, fliperRight->body->GetAngle() / DEGTORAD, 82, 16);
 	
 
 	if (lives == 0) {
@@ -587,8 +587,6 @@ update_status ModuleSceneIntro::Update()
 		{
 			circles.add(App->physics->CreateCircle(616, 940, 16));
 			circles.getLast()->data->listener = this;
-			circles.getLast()->data->body->
-
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) // Spawn a ball on the mouse

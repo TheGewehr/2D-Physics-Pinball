@@ -89,8 +89,9 @@ bool ModuleRender::CleanUp()
 	return true;
 }
 
+
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y )
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, float speed, double angle, int pivot_x, int pivot_y)
 {
 	bool ret = true;
 	SDL_Rect rect;
@@ -112,7 +113,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, f
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
-
+	
 	if(pivot_x != INT_MAX && pivot_y != INT_MAX)
 	{
 		pivot.x = pivot_x;
