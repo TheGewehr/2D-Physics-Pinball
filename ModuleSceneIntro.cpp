@@ -23,15 +23,55 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	// Vectors for the kinematic chains of the flippers
+	int flipers01[16] = {
+	6 - 16, 10-17,
+	15 - 16, 3 - 17,
+	24 - 16, 4 - 17,
+	98 - 16, 43 - 17,
+	98 - 16, 52 - 17,
+	90 - 16, 53 - 17,
+	8 - 16, 27 - 17,
+	4 - 16, 19 - 17
+	};
+
+	int flipers02[14] = {
+	82-86, 4 -16,
+	5 - 86, 44 - 16,
+	3 - 86, 51 - 16,
+	13 - 86, 54 - 16,
+	95 - 86, 26 - 16,
+	99 - 86, 16 - 16,
+	94 - 86, 7 - 16
+	};
 	
+	
+	
+	//
 	App->renderer->camera.x = App->renderer->camera.y = 0;
+
+	minAngleLeft = 0.0f;
+	maxAngleLeft = 65.0f;
+	angleMarginLeft = 10.0f;
+	angularSpeedLeft = 14.0f;
+
+	minAngleRight = 0.0f;
+	maxAngleRight = 65.0f;
+	angleMarginRight = 10.0f;
+	angularSpeedRight = 14.0f;
 
 	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
+	fliper_left = App->textures->Load("pinball/leftFliper.png");
+	fliper_right = App->textures->Load("pinball/flipers02.png");
+	
+
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); 
 	win_fx = App->audio->LoadFx("pinball/win.wav");
+
+
 
 	map = App->textures->Load("pinball/map.png");
 
@@ -51,9 +91,17 @@ bool ModuleSceneIntro::Start()
 	ricochet01->id= 3;
 	ricochet01->body->SetType(b2_staticBody);
 
-	ricochet01 = App->physics->CreateCircle(368,367, 47); 
-	ricochet01->id = 3;
-	ricochet01->body->SetType(b2_staticBody);
+	ricochet02 = App->physics->CreateCircle(368,367, 47); 
+	ricochet02->id = 3;
+	ricochet02->body->SetType(b2_staticBody);
+
+
+	fliperLeft = App->physics->CreateChain(180,922,flipers01,16);
+	fliperLeft->body->SetType(b2_kinematicBody);
+
+	fliperRight = App->physics->CreateChain(413, 921, flipers02, 14);
+	fliperRight->body->SetType(b2_kinematicBody);
+
 
 
 	b2Vec2 map_[50] = {
@@ -501,6 +549,8 @@ bool ModuleSceneIntro::Start()
 	return ret;
 }
 
+//Donde creas la definicion, en el start de la scene verdad?
+
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
@@ -512,17 +562,11 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	//int x, y;
-	//
+
 	App->renderer->Blit(map, 0, 0, nullptr, 1.0f, 0, 0);
-	//
-	//while (c != NULL)
-	//{
-	//	c->data->GetPosition(x, y);
-	//	App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation())
-	//	c->
-	//}
-	//App->renderer->Blit(circle, );
+	App->renderer->Blit(fliper_left, 164, 908, nullptr, 1, fliperLeft->body->GetAngle() / DEGTORAD, 10, 17);
+	App->renderer->Blit(fliper_right, 331, 905, nullptr, 1, fliperRight->body->GetAngle() / DEGTORAD, 82, 16);
+	
 
 	if (lives == 0) {
 		game_end = true;
@@ -543,7 +587,9 @@ update_status ModuleSceneIntro::Update()
 		{
 			circles.add(App->physics->CreateCircle(616, 940, 16));
 			circles.getLast()->data->listener = this;
-			spawn_ball = false;
+
+			//spawn_ball = false;
+
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) // Spawn a ball on the mouse
@@ -552,45 +598,71 @@ update_status ModuleSceneIntro::Update()
 			circles.getLast()->data->listener = this;
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-		{
-			// Pivot 0, 0
-			int rick_head[64] = {
-				14, 36,
-				42, 40,
-				40, 0,
-				75, 30,
-				88, 4,
-				94, 39,
-				111, 36,
-				104, 58,
-				107, 62,
-				117, 67,
-				109, 73,
-				110, 85,
-				106, 91,
-				109, 99,
-				103, 104,
-				100, 115,
-				106, 121,
-				103, 125,
-				98, 126,
-				95, 137,
-				83, 147,
-				67, 147,
-				53, 140,
-				46, 132,
-				34, 136,
-				38, 126,
-				23, 123,
-				30, 114,
-				10, 102,
-				29, 90,
-				0, 75,
-				30, 62
-			};
+		// Left fliper 
 
-			ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_STATE::KEY_REPEAT)
+		{
+			if (fliperLeft->body->GetAngle() - DEGTORAD * angularSpeedLeft > (-DEGTORAD) * maxAngleLeft)
+			{
+				fliperLeft->body->SetAngularVelocity(-angularSpeedLeft);
+			}
+
+			if (fliperLeft->body->GetAngle() - DEGTORAD * angularSpeedLeft < (-DEGTORAD) * maxAngleLeft)
+			{
+				fliperLeft->body->SetAngularVelocity(0.0f);
+			}
+		}
+		else
+		{
+
+			if (fliperLeft->body->GetAngle() < 0.0f)
+			{
+				if (fliperLeft->body->GetAngle() < DEGTORAD * minAngleLeft + DEGTORAD * angleMarginLeft)
+				{
+					fliperLeft->body->SetAngularVelocity(angularSpeedLeft);
+				}
+
+			}
+
+			if (fliperLeft->body->GetAngle() + DEGTORAD * angularSpeedLeft > DEGTORAD * minAngleLeft + DEGTORAD * angleMarginLeft)
+			{
+				fliperLeft->body->SetAngularVelocity(0.0f);
+			}
+		}
+
+		// Right fliper 
+
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_STATE::KEY_REPEAT)
+		{
+			if (fliperRight->body->GetAngle() + DEGTORAD * angularSpeedRight < DEGTORAD * maxAngleRight)
+			{
+				fliperRight->body->SetAngularVelocity(angularSpeedRight);
+				//LOG("go up");
+			}
+
+			if (fliperRight->body->GetAngle() + DEGTORAD * angularSpeedRight > DEGTORAD * maxAngleRight)
+			{
+				//LOG("unacceptable");
+				fliperRight->body->SetAngularVelocity(0.0f);
+			}
+		}
+		else
+		{
+
+			if (fliperRight->body->GetAngle() > 0.0f)
+			{
+				if (fliperRight->body->GetAngle() > DEGTORAD * minAngleRight - DEGTORAD * angleMarginRight)
+				{
+					//LOG("go down");
+					fliperRight->body->SetAngularVelocity(-angularSpeedRight);
+				}
+			}
+
+			if (fliperRight->body->GetAngle() - DEGTORAD * angularSpeedRight < DEGTORAD * minAngleRight - DEGTORAD * angleMarginRight)
+			{
+				//LOG("unacceptable");
+				fliperRight->body->SetAngularVelocity(0.0f);
+			}
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
@@ -693,8 +765,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			
 			App->audio->PlayFx(ball_lost_fx);
-			bodyA->body->SetAwake(false); //TODO delete the ball and Loose a life
-			//bodyA->body.
+			bodyA->body->SetAwake(false);
+				//bodyA->body->SetActive(false);
+			
+			//TODO delete the ball still does not work, fatal error
+			// 
+			//App->physics->GetWorld()->DestroyBody(bodyA->body);
+			//delete bodyA;
+			
+
 			lives -= 1;
 			spawn_ball = true;
 		}
