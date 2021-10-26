@@ -26,7 +26,9 @@ public:
 	PhysBody* sensor_win;
 	PhysBody* ricochet01;
 	PhysBody* ricochet02;
-	PhysBody* ricochet03;
+	//PhysBody* fliperLeft;
+	//PhysBody* fliperRight;
+	//PhysBody* ricochet03;
 	bool sensed;
 
 	// Map Objects of Scene Intro
@@ -36,6 +38,8 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	SDL_Texture* map;
+	SDL_Texture* fliper_left;
+	SDL_Texture* fliper_right;
 
 	uint bonus_fx;
 	uint ball_lost_fx;

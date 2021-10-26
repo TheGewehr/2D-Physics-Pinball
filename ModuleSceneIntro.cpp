@@ -23,15 +23,44 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	// Vectors for the kinematic chains of the flippers
+	b2Vec2 Flip_L[8] = {
+	{4, 15	   },
+	{8, 6	   },
+	{17, 2	   },
+	{103, 12   },
+	{106, 18   },
+	{103, 24   },
+	{18, 29	   },
+	{7, 25	   }
+	};
+
+	b2Vec2 Flip_R[8] = {
+	{91, 3	   },
+	{8, 11	   },
+	{3, 17	   },
+	{7, 23	   },
+	{93, 28	   },
+	{102, 24   },
+	{104, 15   },
+	{99, 6	   }
+	};
+	//
 	
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
 	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
+	fliper_left = App->textures->Load("pinball/flipers01");
+	fliper_right = App->textures->Load("pinball/flipers02");
+	// Flippers 109 x 32 
+
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); 
 	win_fx = App->audio->LoadFx("pinball/win.wav");
+
+
 
 	map = App->textures->Load("pinball/map.png");
 
@@ -51,9 +80,9 @@ bool ModuleSceneIntro::Start()
 	ricochet01->id= 3;
 	ricochet01->body->SetType(b2_staticBody);
 
-	ricochet01 = App->physics->CreateCircle(368,367, 47); 
-	ricochet01->id = 3;
-	ricochet01->body->SetType(b2_staticBody);
+	ricochet02 = App->physics->CreateCircle(368,367, 47); 
+	ricochet02->id = 3;
+	ricochet02->body->SetType(b2_staticBody);
 
 
 	b2Vec2 map_[50] = {
@@ -497,9 +526,62 @@ bool ModuleSceneIntro::Start()
 	fixture09.shape = &shape09;
 	obj09->CreateFixture(&fixture09);
 
+	// Left 
+	x = 160;
+	y = 910;
+
+	b2BodyDef fliperLeft;
+	fliperLeft.type = b2_kinematicBody;
+	fliperLeft.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* flipLeft = App->physics->AddToWorld(&fliperLeft);
+
+	b2ChainShape shape10;
+	b2Vec2 Vertices10[8];
+
+	for (int i = 0; i < 8; i++)
+	{
+		Vertices10[i] = PIXEL_TO_METERS(Flip_L[i]);
+	}
+
+	shape10.CreateChain(Vertices10, 8);
+
+
+	b2FixtureDef fixture10;
+	fixture10.shape = &shape10;
+	flipLeft->CreateFixture(&fixture10);
+
+	// Right
+
+	x = 300;
+	y = 910;
+
+	b2BodyDef fliperRight;
+	fliperRight.type = b2_kinematicBody;
+	fliperRight.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	
+
+	b2Body* flipRight = App->physics->AddToWorld(&fliperRight);
+
+	b2ChainShape shape11;
+	b2Vec2 Vertices11[8];
+
+	for (int i = 0; i < 8; i++)
+	{
+		Vertices11[i] = PIXEL_TO_METERS(Flip_R[i]);
+	}
+
+	shape11.CreateChain(Vertices11, 8);
+
+
+	b2FixtureDef fixture11;
+	fixture11.shape = &shape11;
+	flipRight->CreateFixture(&fixture11);
 
 	return ret;
 }
+
+//Donde creas la definicion, en el start de la scene verdad?
 
 // Load assets
 bool ModuleSceneIntro::CleanUp()
@@ -512,17 +594,9 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	//int x, y;
-	//
+	
 	App->renderer->Blit(map, 0, 0, nullptr, 1.0f, 0, 0);
-	//
-	//while (c != NULL)
-	//{
-	//	c->data->GetPosition(x, y);
-	//	App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation())
-	//	c->
-	//}
-	//App->renderer->Blit(circle, );
+	
 
 	if (lives == 0) {
 		game_end = true;
@@ -688,8 +762,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			
 			App->audio->PlayFx(ball_lost_fx);
-			bodyA->body->SetAwake(false); //TODO delete the ball and Loose a life
-			//bodyA->body.
+			bodyA->body->SetAwake(false);
+				//bodyA->body->SetActive(false);
+			
+			//TODO delete the ball still does not work, fatal error
+			// 
+			//App->physics->GetWorld()->DestroyBody(bodyA->body);
+			//delete bodyA;
+			
+
 			lives -= 1;
 		}
 		if ((bodyA->id == 0) && (bodyB->id == 2))
