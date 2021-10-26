@@ -25,25 +25,24 @@ bool ModuleSceneIntro::Start()
 
 	// Vectors for the kinematic chains of the flippers
 	b2Vec2 Flip_L[8] = {
-	{4, 15	   },
-	{8, 6	   },
-	{17, 2	   },
-	{103, 12   },
-	{106, 18   },
-	{103, 24   },
-	{18, 29	   },
-	{7, 25	   }
+	{6, 10	 },
+	{15, 3	 },
+	{24, 4	 },
+	{98, 43	 },
+	{98, 52	 },
+	{90, 53	 },
+	{8, 27	 },
+	{4, 19	 }
 	};
 
-	b2Vec2 Flip_R[8] = {
-	{91, 3	   },
-	{8, 11	   },
-	{3, 17	   },
-	{7, 23	   },
-	{93, 28	   },
-	{102, 24   },
-	{104, 15   },
-	{99, 6	   }
+	b2Vec2 Flip_R[7] = {
+	{82, 4	},
+	{5, 44	},
+	{3, 51	},
+	{13, 54	},
+	{95, 26	},
+	{99, 16	},
+	{94, 7	}
 	};
 	//
 	
@@ -527,8 +526,8 @@ bool ModuleSceneIntro::Start()
 	obj09->CreateFixture(&fixture09);
 
 	// Left 
-	x = 160;
-	y = 910;
+	x = 164;
+	y = 905;
 
 	b2BodyDef fliperLeft;
 	fliperLeft.type = b2_kinematicBody;
@@ -553,8 +552,8 @@ bool ModuleSceneIntro::Start()
 
 	// Right
 
-	x = 300;
-	y = 910;
+	x = 330;
+	y = 904;
 
 	b2BodyDef fliperRight;
 	fliperRight.type = b2_kinematicBody;
@@ -564,14 +563,14 @@ bool ModuleSceneIntro::Start()
 	b2Body* flipRight = App->physics->AddToWorld(&fliperRight);
 
 	b2ChainShape shape11;
-	b2Vec2 Vertices11[8];
+	b2Vec2 Vertices11[7];
 
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < 7; i++)
 	{
 		Vertices11[i] = PIXEL_TO_METERS(Flip_R[i]);
 	}
 
-	shape11.CreateChain(Vertices11, 8);
+	shape11.CreateChain(Vertices11, 7);
 
 
 	b2FixtureDef fixture11;
