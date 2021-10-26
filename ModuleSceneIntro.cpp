@@ -50,18 +50,22 @@ bool ModuleSceneIntro::Start()
 	//
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	minAngleLeft = 0.0f;
+	maxAngleLeft = 65.0f;
+	angleMarginLeft = 10.0f;
+	angularSpeedLeft = 14.0f;
 
-	angleMarginLeft = 10.0f;//
-	angularSpeedLeft= 14.0f;//
-	minAngleLeft = 0.0f;//
-	maxAngleLeft = 65.0f;//
+	minAngleRight = 0.0f;
+	maxAngleRight = 65.0f;
+	angleMarginRight = 10.0f;
+	angularSpeedRight = 14.0f;
 
 	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
-	fliper_left = App->textures->Load("pinball/flipers01");
-	fliper_right = App->textures->Load("pinball/flipers02");
-	// Flippers 109 x 32 
+	fliper_left = App->textures->Load("pinball/leftFliper.png");
+	fliper_right = App->textures->Load("pinball/flipers02.png");
+	
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); 
@@ -91,9 +95,9 @@ bool ModuleSceneIntro::Start()
 	ricochet02->id = 3;
 	ricochet02->body->SetType(b2_staticBody);
 
-	fliperLeft = App->physics->CreateChain(170,918,flipers01,16);
-	fliperLeft->body->SetType(b2_kinematicBody);
 
+	fliperLeft = App->physics->CreateChain(180,922,flipers01,16);
+	fliperLeft->body->SetType(b2_kinematicBody);
 
 	fliperRight = App->physics->CreateChain(413, 921, flipers02, 14);
 	fliperRight->body->SetType(b2_kinematicBody);
@@ -560,6 +564,8 @@ update_status ModuleSceneIntro::Update()
 {
 	
 	App->renderer->Blit(map, 0, 0, nullptr, 1.0f, 0, 0);
+	App->renderer->Blit(fliper_left, 164, 908, nullptr, 1, fliperLeft->body->GetAngle() / DEGTORAD, 30 * SCREEN_SIZE, 25 * SCREEN_SIZE);
+	App->renderer->Blit(fliper_right, 331, 905, nullptr, 1, fliperRight->body->GetAngle() / DEGTORAD, 30 * SCREEN_SIZE, 25 * SCREEN_SIZE);
 	
 
 	if (lives == 0) {
@@ -581,6 +587,7 @@ update_status ModuleSceneIntro::Update()
 		{
 			circles.add(App->physics->CreateCircle(616, 940, 16));
 			circles.getLast()->data->listener = this;
+			circles.getLast()->data->body->
 
 		}
 
@@ -589,6 +596,8 @@ update_status ModuleSceneIntro::Update()
 			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 16));
 			circles.getLast()->data->listener = this;
 		}
+
+		// Left fliper 
 
 		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
@@ -617,6 +626,41 @@ update_status ModuleSceneIntro::Update()
 			if (fliperLeft->body->GetAngle() + DEGTORAD * angularSpeedLeft > DEGTORAD * minAngleLeft + DEGTORAD * angleMarginLeft)
 			{
 				fliperLeft->body->SetAngularVelocity(0.0f);
+			}
+		}
+
+		// Right fliper 
+
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_STATE::KEY_REPEAT)
+		{
+			if (fliperRight->body->GetAngle() + DEGTORAD * angularSpeedRight < DEGTORAD * maxAngleRight)
+			{
+				fliperRight->body->SetAngularVelocity(angularSpeedRight);
+				//LOG("go up");
+			}
+
+			if (fliperRight->body->GetAngle() + DEGTORAD * angularSpeedRight > DEGTORAD * maxAngleRight)
+			{
+				//LOG("unacceptable");
+				fliperRight->body->SetAngularVelocity(0.0f);
+			}
+		}
+		else
+		{
+
+			if (fliperRight->body->GetAngle() > 0.0f)
+			{
+				if (fliperRight->body->GetAngle() > DEGTORAD * minAngleRight - DEGTORAD * angleMarginRight)
+				{
+					//LOG("go down");
+					fliperRight->body->SetAngularVelocity(-angularSpeedRight);
+				}
+			}
+
+			if (fliperRight->body->GetAngle() - DEGTORAD * angularSpeedRight < DEGTORAD * minAngleRight - DEGTORAD * angleMarginRight)
+			{
+				//LOG("unacceptable");
+				fliperRight->body->SetAngularVelocity(0.0f);
 			}
 		}
 
