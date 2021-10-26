@@ -24,29 +24,37 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	// Vectors for the kinematic chains of the flippers
-	b2Vec2 Flip_L[8] = {
-	{6, 10	 },
-	{15, 3	 },
-	{24, 4	 },
-	{98, 43	 },
-	{98, 52	 },
-	{90, 53	 },
-	{8, 27	 },
-	{4, 19	 }
+	int flipers01[16] = {
+	6 - 16, 10-17,
+	15 - 16, 3 - 17,
+	24 - 16, 4 - 17,
+	98 - 16, 43 - 17,
+	98 - 16, 52 - 17,
+	90 - 16, 53 - 17,
+	8 - 16, 27 - 17,
+	4 - 16, 19 - 17
 	};
 
-	b2Vec2 Flip_R[7] = {
-	{82, 4	},
-	{5, 44	},
-	{3, 51	},
-	{13, 54	},
-	{95, 26	},
-	{99, 16	},
-	{94, 7	}
+	int flipers02[14] = {
+	82-86, 4 -16,
+	5 - 86, 44 - 16,
+	3 - 86, 51 - 16,
+	13 - 86, 54 - 16,
+	95 - 86, 26 - 16,
+	99 - 86, 16 - 16,
+	94 - 86, 7 - 16
 	};
-	//
 	
+	
+	
+	//
 	App->renderer->camera.x = App->renderer->camera.y = 0;
+
+
+	angleMarginLeft = 10.0f;//
+	angularSpeedLeft= 14.0f;//
+	minAngleLeft = 0.0f;//
+	maxAngleLeft = 65.0f;//
 
 	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
 	box = App->textures->Load("pinball/crate.png");
@@ -82,6 +90,14 @@ bool ModuleSceneIntro::Start()
 	ricochet02 = App->physics->CreateCircle(368,367, 47); 
 	ricochet02->id = 3;
 	ricochet02->body->SetType(b2_staticBody);
+
+	fliperLeft = App->physics->CreateChain(170,918,flipers01,16);
+	fliperLeft->body->SetType(b2_kinematicBody);
+
+
+	fliperRight = App->physics->CreateChain(413, 921, flipers02, 14);
+	fliperRight->body->SetType(b2_kinematicBody);
+
 
 
 	b2Vec2 map_[50] = {
@@ -525,57 +541,6 @@ bool ModuleSceneIntro::Start()
 	fixture09.shape = &shape09;
 	obj09->CreateFixture(&fixture09);
 
-	// Left 
-	x = 164;
-	y = 905;
-
-	b2BodyDef fliperLeft;
-	fliperLeft.type = b2_kinematicBody;
-	fliperLeft.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* flipLeft = App->physics->AddToWorld(&fliperLeft);
-
-	b2ChainShape shape10;
-	b2Vec2 Vertices10[8];
-
-	for (int i = 0; i < 8; i++)
-	{
-		Vertices10[i] = PIXEL_TO_METERS(Flip_L[i]);
-	}
-
-	shape10.CreateChain(Vertices10, 8);
-
-
-	b2FixtureDef fixture10;
-	fixture10.shape = &shape10;
-	flipLeft->CreateFixture(&fixture10);
-
-	// Right
-
-	x = 330;
-	y = 904;
-
-	b2BodyDef fliperRight;
-	fliperRight.type = b2_kinematicBody;
-	fliperRight.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-	
-
-	b2Body* flipRight = App->physics->AddToWorld(&fliperRight);
-
-	b2ChainShape shape11;
-	b2Vec2 Vertices11[7];
-
-	for (int i = 0; i < 7; i++)
-	{
-		Vertices11[i] = PIXEL_TO_METERS(Flip_R[i]);
-	}
-
-	shape11.CreateChain(Vertices11, 7);
-
-
-	b2FixtureDef fixture11;
-	fixture11.shape = &shape11;
-	flipRight->CreateFixture(&fixture11);
 
 	return ret;
 }
@@ -625,45 +590,34 @@ update_status ModuleSceneIntro::Update()
 			circles.getLast()->data->listener = this;
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_STATE::KEY_REPEAT)
 		{
-			// Pivot 0, 0
-			int rick_head[64] = {
-				14, 36,
-				42, 40,
-				40, 0,
-				75, 30,
-				88, 4,
-				94, 39,
-				111, 36,
-				104, 58,
-				107, 62,
-				117, 67,
-				109, 73,
-				110, 85,
-				106, 91,
-				109, 99,
-				103, 104,
-				100, 115,
-				106, 121,
-				103, 125,
-				98, 126,
-				95, 137,
-				83, 147,
-				67, 147,
-				53, 140,
-				46, 132,
-				34, 136,
-				38, 126,
-				23, 123,
-				30, 114,
-				10, 102,
-				29, 90,
-				0, 75,
-				30, 62
-			};
+			if (fliperLeft->body->GetAngle() - DEGTORAD * angularSpeedLeft > (-DEGTORAD) * maxAngleLeft)
+			{
+				fliperLeft->body->SetAngularVelocity(-angularSpeedLeft);
+			}
 
-			ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+			if (fliperLeft->body->GetAngle() - DEGTORAD * angularSpeedLeft < (-DEGTORAD) * maxAngleLeft)
+			{
+				fliperLeft->body->SetAngularVelocity(0.0f);
+			}
+		}
+		else
+		{
+
+			if (fliperLeft->body->GetAngle() < 0.0f)
+			{
+				if (fliperLeft->body->GetAngle() < DEGTORAD * minAngleLeft + DEGTORAD * angleMarginLeft)
+				{
+					fliperLeft->body->SetAngularVelocity(angularSpeedLeft);
+				}
+
+			}
+
+			if (fliperLeft->body->GetAngle() + DEGTORAD * angularSpeedLeft > DEGTORAD * minAngleLeft + DEGTORAD * angleMarginLeft)
+			{
+				fliperLeft->body->SetAngularVelocity(0.0f);
+			}
 		}
 
 			// Prepare for raycast ------------------------------------------------------

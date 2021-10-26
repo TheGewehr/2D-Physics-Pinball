@@ -26,10 +26,21 @@ public:
 	PhysBody* sensor_win;
 	PhysBody* ricochet01;
 	PhysBody* ricochet02;
-	//PhysBody* fliperLeft;
-	//PhysBody* fliperRight;
+	PhysBody* fliperLeft;
+	PhysBody* fliperRight;
 	//PhysBody* ricochet03;
 	bool sensed;
+
+
+	float angularSpeedLeft;
+	float maxAngleLeft;
+	float minAngleLeft;
+	float angleMarginLeft;
+
+	float angularSpeedRight;
+	float maxAngleRight;
+	float minAngleRight;
+	float angleMarginRight;
 
 	// Map Objects of Scene Intro
 
