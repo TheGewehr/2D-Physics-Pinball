@@ -26,12 +26,12 @@ bool ModuleSceneIntro::Start()
 	
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); 
+	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); // loose a ball audio
-	win_fx = App->audio->LoadFx("pinball/win.wav"); // win audio
+	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); 
+	win_fx = App->audio->LoadFx("pinball/win.wav");
 
 	map = App->textures->Load("pinball/map.png");
 
@@ -512,8 +512,17 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-
+	//int x, y;
+	//
 	App->renderer->Blit(map, 0, 0, nullptr, 1.0f, 0, 0);
+	//
+	//while (c != NULL)
+	//{
+	//	c->data->GetPosition(x, y);
+	//	App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation())
+	//	c->
+	//}
+	//App->renderer->Blit(circle, );
 
 	if (lives == 0) {
 		game_end = true;
@@ -582,7 +591,7 @@ update_status ModuleSceneIntro::Update()
 			};
 
 			ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
-
+		}
 
 			// Prepare for raycast ------------------------------------------------------
 
@@ -643,7 +652,7 @@ update_status ModuleSceneIntro::Update()
 				if (normal.x != 0.0f)
 					App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 			}
-		}
+		
 		
 	}
 	else if (game_end == true && win_con == true)
