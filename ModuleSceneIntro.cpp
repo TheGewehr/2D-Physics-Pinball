@@ -45,7 +45,7 @@ bool ModuleSceneIntro::Start()
 	94 - 86, 7 - 16
 	};
 	
-	
+	// Creating the spring
 	
 	//
 	App->renderer->camera.x = App->renderer->camera.y = 0;
@@ -103,6 +103,10 @@ bool ModuleSceneIntro::Start()
 	fliperRight = App->physics->CreateChain(413, 921, flipers02, 14);
 	fliperRight->body->SetType(b2_kinematicBody);
 	fliperRight->id = 10;
+
+	// spring 
+	spring = App->physics->CreateRectangle(615, 989, 30, 30);
+	spring->body->SetType(b2_kinematicBody);
 
 
 
@@ -283,6 +287,9 @@ bool ModuleSceneIntro::Start()
 	};
 
 	//b2Vec2 Obj07
+
+
+
 
 	// Creation of the map ///////////////////////////////////////////////////////////////////////////////
 	// main static object
@@ -665,6 +672,10 @@ update_status ModuleSceneIntro::Update()
 
 	if (!game_end)
 	{
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+		{
+
+		}
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
@@ -687,6 +698,36 @@ update_status ModuleSceneIntro::Update()
 			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 16));
 			circles.getLast()->data->listener = this;
 		}
+
+		// spring (starting to hate it)
+		
+		b2Vec2 pos = spring->body->GetPosition();
+
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_STATE::KEY_REPEAT)
+		{
+			if (METERS_TO_PIXELS(pos.y) < 989 + 40)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 5));
+			}
+			else if (METERS_TO_PIXELS(pos.y) > 989 + 20)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 0));
+			}
+		}
+		else
+		{
+			
+			if (METERS_TO_PIXELS(pos.y) > 989)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, -25));
+			}
+			else
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 0));
+			}
+		}
+		LOG("%i", METERS_TO_PIXELS(pos.y)); 
 
 		// Left fliper 
 

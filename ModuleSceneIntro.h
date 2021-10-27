@@ -28,6 +28,7 @@ public:
 	PhysBody* ricochet02;
 	PhysBody* fliperLeft;
 	PhysBody* fliperRight;
+	PhysBody* spring;
 	//PhysBody* ricochet03;
 	bool sensed;
 
