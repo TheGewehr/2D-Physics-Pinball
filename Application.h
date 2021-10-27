@@ -11,8 +11,10 @@ class ModuleInput;
 class ModuleAudio;
 class ModulePlayer;
 class ModuleSceneIntro;
+class ModuleLoadingScreen;
 class ModulePhysics;
 class ModuleFonts;
+class ModuleFadeToBlack;
 
 
 class Application
@@ -25,8 +27,10 @@ public:
 	ModuleAudio* audio;
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
+	ModuleLoadingScreen* loading_screen;
 	ModulePhysics* physics;
 	ModuleFonts* font;
+	ModuleFadeToBlack* fade;
 
 private:
 

@@ -2,7 +2,12 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
+#include "ModuleWindow.h"
+#include "ModuleInput.h"
 #include <math.h>
+
+#include "SDL/include/SDL_render.h"
+#include "SDL/include/SDL_scancode.h"
 
 ModuleRender::ModuleRender(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
