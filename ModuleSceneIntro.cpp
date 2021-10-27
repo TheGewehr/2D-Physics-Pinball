@@ -98,9 +98,11 @@ bool ModuleSceneIntro::Start()
 
 	fliperLeft = App->physics->CreateChain(180,922,flipers01,16);
 	fliperLeft->body->SetType(b2_kinematicBody);
+	fliperLeft->id = 10;
 
 	fliperRight = App->physics->CreateChain(413, 921, flipers02, 14);
 	fliperRight->body->SetType(b2_kinematicBody);
+	fliperRight->id = 10;
 
 
 
@@ -260,6 +262,24 @@ bool ModuleSceneIntro::Start()
 	{491, 535 },
 	{509, 543 },
 	{550, 462 }
+	};
+
+	b2Vec2 Bug01[6] = {
+	{93, 820  },
+	{93, 735  },
+	{117, 791 }
+	};
+
+	b2Vec2 Bug02[6] = {
+	{540, 458},
+	{495, 536},
+	{507, 538}
+	};
+
+	b2Vec2 Bug03[3] = {
+	{495, 723},
+	{475, 783},
+	{498, 786}
 	};
 
 	//b2Vec2 Obj07
@@ -521,8 +541,6 @@ bool ModuleSceneIntro::Start()
 
 	// Static intern object
 	// 9
-	//b2BodyDef intern09;
-	//Object01 = App->physics->AddToWorld(&intern09);
 
 	b2BodyDef body09;
 	body09.type = b2_staticBody;
@@ -544,6 +562,78 @@ bool ModuleSceneIntro::Start()
 	b2FixtureDef fixture09;
 	fixture09.shape = &shape09;
 	obj09->CreateFixture(&fixture09);
+
+	// Static intern Bug solver collision
+	// 10
+
+	b2BodyDef body10;
+	body10.type = b2_staticBody;
+	body10.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* obj10 = App->physics->AddToWorld(&body10);
+
+	b2ChainShape shape10;
+	b2Vec2 Vertices10[3];
+
+	for (int i = 0; i < 3; i++)
+	{
+		Vertices10[i] = PIXEL_TO_METERS(Bug01[i]);
+	}
+
+	shape10.CreateChain(Vertices10, 3);
+
+
+	b2FixtureDef fixture10;
+	fixture10.shape = &shape10;
+	obj10->CreateFixture(&fixture10);
+
+	// Static intern Bug solver collision
+	// 11
+
+	b2BodyDef body11;
+	body11.type = b2_staticBody;
+	body11.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* obj11 = App->physics->AddToWorld(&body11);
+
+	b2ChainShape shape11;
+	b2Vec2 Vertices11[3];
+
+	for (int i = 0; i < 3; i++)
+	{
+		Vertices11[i] = PIXEL_TO_METERS(Bug02[i]);
+	}
+
+	shape11.CreateChain(Vertices11, 3);
+
+
+	b2FixtureDef fixture11;
+	fixture11.shape = &shape11;
+	obj11->CreateFixture(&fixture11);
+
+	// Static intern Bug solver collision
+	// 12
+
+	b2BodyDef body12;
+	body12.type = b2_staticBody;
+	body12.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* obj12 = App->physics->AddToWorld(&body12);
+
+	b2ChainShape shape12;
+	b2Vec2 Vertices12[3];
+
+	for (int i = 0; i < 3; i++)
+	{
+		Vertices12[i] = PIXEL_TO_METERS(Bug03[i]);
+	}
+
+	shape12.CreateChain(Vertices12, 3);
+
+
+	b2FixtureDef fixture12;
+	fixture12.shape = &shape12;
+	obj12->CreateFixture(&fixture12);
 
 
 	return ret;
@@ -637,12 +727,10 @@ update_status ModuleSceneIntro::Update()
 			if (fliperRight->body->GetAngle() + DEGTORAD * angularSpeedRight < DEGTORAD * maxAngleRight)
 			{
 				fliperRight->body->SetAngularVelocity(angularSpeedRight);
-				//LOG("go up");
 			}
 
 			if (fliperRight->body->GetAngle() + DEGTORAD * angularSpeedRight > DEGTORAD * maxAngleRight)
 			{
-				//LOG("unacceptable");
 				fliperRight->body->SetAngularVelocity(0.0f);
 			}
 		}
@@ -653,14 +741,12 @@ update_status ModuleSceneIntro::Update()
 			{
 				if (fliperRight->body->GetAngle() > DEGTORAD * minAngleRight - DEGTORAD * angleMarginRight)
 				{
-					//LOG("go down");
 					fliperRight->body->SetAngularVelocity(-angularSpeedRight);
 				}
 			}
 
 			if (fliperRight->body->GetAngle() - DEGTORAD * angularSpeedRight < DEGTORAD * minAngleRight - DEGTORAD * angleMarginRight)
 			{
-				//LOG("unacceptable");
 				fliperRight->body->SetAngularVelocity(0.0f);
 			}
 		}
@@ -787,9 +873,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		else if ((bodyA->id == 0) && (bodyB->id == 3))
 		{
 			//App->audio->PlayFx(bonus_fx);
-			int multi = 20;
+			int multi = 15;
 			b2Vec2 direction;
-			direction = (bodyA->body->GetWorldCenter()) - (bodyB->body->GetWorldCenter()) ; // World or local
+			direction = (bodyA->body->GetWorldCenter()) - (bodyB->body->GetWorldCenter()) ; 
 			direction = { direction.x * multi,direction.y * multi };
 			bodyA->body->SetLinearVelocity(direction);
 			App->audio->PlayFx(bonus_fx);
@@ -798,6 +884,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			//TODO sum points
 
 		}
+		
 	}
 	
 }
