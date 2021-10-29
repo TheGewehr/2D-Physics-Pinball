@@ -20,7 +20,7 @@ public:
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
+	p2List<PhysBody*> mapStaticBodies;
 
 	PhysBody* sensor_loss;
 	PhysBody* sensor_win;
@@ -28,7 +28,9 @@ public:
 	PhysBody* ricochet02;
 	PhysBody* fliperLeft;
 	PhysBody* fliperRight;
+
 	PhysBody* spring;
+
 	//PhysBody* ricochet03;
 	bool sensed;
 
@@ -47,8 +49,6 @@ public:
 
 
 	SDL_Texture* circle;
-	SDL_Texture* box;
-	SDL_Texture* rick;
 	SDL_Texture* map;
 	SDL_Texture* fliper_left;
 	SDL_Texture* fliper_right;
@@ -56,7 +56,11 @@ public:
 	uint bonus_fx;
 	uint ball_lost_fx;
 	uint win_fx;
-	//uint loose_fx;
+	uint hitmarker_fx;
+	uint sonic_fx;
+	uint wasted_fx;
+	uint sadforloosing_fx;
+	uint surprisem_fx;
 
 	p2Point<int> ray;
 	bool ray_on;

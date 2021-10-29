@@ -49,6 +49,7 @@ public:
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateCircleSensor(int x, int y, int radius);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateStaticChain(int x, int y, int* points, int size);
 	void CreateSpring(int x, int y);
 
 	b2World* GetWorld();
