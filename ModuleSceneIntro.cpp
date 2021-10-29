@@ -149,9 +149,8 @@ bool ModuleSceneIntro::Start()
 	571, 104   ,
 	515, 49	   ,
 	454, 19	   ,
-	384, 5	   
-=======
-
+	384, 5
+	}
 	// spring 
 	spring = App->physics->CreateRectangle(615, 989, 30, 30);
 	spring->body->SetType(b2_kinematicBody);
