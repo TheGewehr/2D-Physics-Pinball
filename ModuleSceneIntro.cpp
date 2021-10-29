@@ -45,6 +45,58 @@ bool ModuleSceneIntro::Start()
 	94 - 86, 7 - 16
 	};
 
+//	// Creating the spring
+//	
+//	//
+//	App->renderer->camera.x = App->renderer->camera.y = 0;
+//
+//	minAngleLeft = 0.0f;
+//	maxAngleLeft = 65.0f;
+//	angleMarginLeft = 10.0f;
+//	angularSpeedLeft = 14.0f;
+//
+//	minAngleRight = 0.0f;
+//	maxAngleRight = 65.0f;
+//	angleMarginRight = 10.0f;
+//	angularSpeedRight = 14.0f;
+//
+//	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
+//	box = App->textures->Load("pinball/crate.png");
+//	rick = App->textures->Load("pinball/rick_head.png");
+//	fliper_left = App->textures->Load("pinball/leftFliper.png");
+//	fliper_right = App->textures->Load("pinball/flipers02.png");
+//	
+//
+//	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+//	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav"); 
+//	win_fx = App->audio->LoadFx("pinball/win.wav");
+//
+//
+//
+//	map = App->textures->Load("pinball/map.png");
+//
+//	lives = 3;
+//	win_con = false;
+//	game_end = false;
+//	spawn_ball = false;
+//	end_rect = { 135, 412, 320, 200};
+//
+//	sensor_loss = App->physics->CreateRectangleSensor(300,1090, 220, 10);
+//	sensor_loss->id = 1;
+//
+//	sensor_win = App->physics->CreateRectangleSensor(90, 320, 20, 20);
+//	sensor_win->id = 2;
+//
+//	ricochet01 = App->physics->CreateCircle(254,270,47); 
+//	ricochet01->id= 3;
+//	ricochet01->body->SetType(b2_staticBody);
+//
+//	ricochet02 = App->physics->CreateCircle(368,367, 47); 
+//	ricochet02->id = 3;
+//	ricochet02->body->SetType(b2_staticBody);
+//>>>>>>> master
+
+
 
 
 	int map_[100] = {
@@ -98,6 +150,66 @@ bool ModuleSceneIntro::Start()
 	515, 49	   ,
 	454, 19	   ,
 	384, 5	   
+=======
+
+	// spring 
+	spring = App->physics->CreateRectangle(615, 989, 30, 30);
+	spring->body->SetType(b2_kinematicBody);
+
+
+//
+//	b2Vec2 map_[50] = {
+//	{344, 5	  },
+//	{279, 17  },
+//	{213, 49  },
+//	{197, 64  },
+//	{81, 181  },
+//	{46, 217  },
+//	{12, 280  },
+//	{8, 302	  },
+//	{8, 419	  },
+//	{24, 426  },
+//	{24, 445  },
+//	{16, 451  },
+//	{15, 644  },
+//	{47, 676  },
+//	{47, 696  },
+//	{8, 735	  },
+//	{8, 897	  },
+//	{18, 908  },
+//	{180, 986 },
+//	{193, 999 },
+//	{193, 1088},
+//	{399, 1088},
+//	{399, 1003},
+//	{410, 989 },
+//	{575, 906 },
+//	{588, 893 },
+//	{588, 721 },
+//	{526, 659 },
+//	{526, 598 },
+//	{543, 574 },
+//	{589, 485 },
+//	{589, 389 },
+//	{573, 372 },
+//	{524, 186 },
+//	{522, 157 },
+//	{489, 154 },
+//	{487, 102 },
+//	{503, 104 },
+//	{538, 133 },
+//	{574, 188 },
+//	{596, 268 },
+//	{595, 975 },
+//	{636, 975 },
+//	{635, 252 },
+//	{621, 182 },
+//	{598, 138 },
+//	{571, 104 },
+//	{515, 49  },
+//	{454, 19  },
+//	{384, 5	  }
+//>>>>>>> master
 	};
 
 	int Obj01[5+5] = {
@@ -223,7 +335,256 @@ bool ModuleSceneIntro::Start()
 	498, 786
 	};
 
-	
+////
+////	int x = 0;
+////	int y = 0;
+////
+////	b2BodyDef body;
+////	body.type = b2_staticBody;
+////	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* map = App->physics->AddToWorld(&body);
+////	//world->CreateBody(&body)
+////
+////	b2ChainShape shape;
+////	b2Vec2 wVertices[50];
+////
+////	for (int i = 0; i < 50; i++)
+////	{
+////		wVertices[i] = PIXEL_TO_METERS(map_[i]);
+////	}
+////
+////	shape.CreateChain(wVertices, 50);
+////
+////
+////	b2FixtureDef fixture;
+////	fixture.shape = &shape;
+////	map->CreateFixture(&fixture);
+////
+////	// Static intern objects
+////	/// 1
+////
+////	//b2BodyDef intern01;
+////	//Object01 = App->physics->AddToWorld(&intern01);
+////
+////	b2BodyDef body01;
+////	body01.type = b2_staticBody;
+////	body01.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj01 = App->physics->AddToWorld(&body01);
+////
+////	b2ChainShape shape01;
+////	b2Vec2 Vertices01[5];
+////
+////	for (int i = 0; i < 5; i++)
+////	{
+////		Vertices01[i] = PIXEL_TO_METERS(Obj01[i]);
+////	}
+////
+////	shape01.CreateChain(Vertices01, 5);
+////
+////
+////	b2FixtureDef fixture01;
+////	fixture01.shape = &shape01;
+////	obj01->CreateFixture(&fixture01);
+////	///
+////
+////	// Static intern objects
+////	/// 2
+////
+////	//b2BodyDef intern02;
+////	//Object02 = App->physics->AddToWorld(&intern02);
+////
+////
+////	b2BodyDef body02;
+////	body02.type = b2_staticBody;
+////	body02.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj02 = App->physics->AddToWorld(&body02);
+////
+////	b2ChainShape shape02;
+////	b2Vec2 Vertices02[5];
+////
+////	for (int i = 0; i < 5; i++)
+////	{
+////		Vertices02[i] = PIXEL_TO_METERS(Obj02[i]); ///
+////	}
+////
+////	shape02.CreateChain(Vertices02, 5);
+////
+////	b2FixtureDef fixture02;
+////	fixture02.shape = &shape02;
+////	obj02->CreateFixture(&fixture02);
+////	///
+////
+////	// Static intern objects
+////	/// 3
+////
+////	//b2BodyDef intern03;
+////	//Object03 = App->physics->AddToWorld(&intern03);
+////
+////
+////	b2BodyDef body03;
+////	body03.type = b2_staticBody;
+////	body03.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj03 = App->physics->AddToWorld(&body03);
+////
+////	b2ChainShape shape03;
+////	b2Vec2 Vertices03[6];
+////
+////	for (int i = 0; i < 6; i++)
+////	{
+////		Vertices03[i] = PIXEL_TO_METERS(Obj03[i]); ///
+////	}
+////
+////	shape03.CreateChain(Vertices03, 6);
+////
+////	b2FixtureDef fixture03;
+////	fixture03.shape = &shape03;
+////	obj03->CreateFixture(&fixture03);
+////	///
+////
+////	// Static intern objects
+////	/// 4
+////
+////	//b2BodyDef intern04;
+////	//Object04 = App->physics->AddToWorld(&intern04);
+////
+////
+////	b2BodyDef body04;
+////	body04.type = b2_staticBody;
+////	body04.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj04 = App->physics->AddToWorld(&body04);
+////
+////	b2ChainShape shape04;
+////	b2Vec2 Vertices04[7];
+////
+////	for (int i = 0; i < 7; i++)
+////	{
+////		Vertices04[i] = PIXEL_TO_METERS(Obj04[i]); ///
+////	}
+////
+////	shape04.CreateChain(Vertices04, 7);
+////
+////	b2FixtureDef fixture04;
+////	fixture04.shape = &shape04;
+////	obj04->CreateFixture(&fixture04);
+////	///
+////
+////	// Static intern objects
+////	/// 5
+////
+////	//b2BodyDef intern05;
+////	//Object05 = App->physics->AddToWorld(&intern05);
+////
+////
+////	b2BodyDef body05;
+////	body05.type = b2_staticBody;
+////	body05.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj05 = App->physics->AddToWorld(&body05);
+////
+////	b2ChainShape shape05;
+////	b2Vec2 Vertices05[8];
+////
+////	for (int i = 0; i < 8; i++)
+////	{
+////		Vertices05[i] = PIXEL_TO_METERS(Obj05[i]); ///
+////	}
+////
+////	shape05.CreateChain(Vertices05, 8);
+////
+////	b2FixtureDef fixture05;
+////	fixture05.shape = &shape05;
+////	obj05->CreateFixture(&fixture05);
+////	///
+////
+////	// Static intern objects
+////	/// 6
+////
+////	//b2BodyDef intern06;
+////	//Object06 = App->physics->AddToWorld(&intern06);
+////
+////
+////	b2BodyDef body06;
+////	body06.type = b2_staticBody;
+////	body06.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj06 = App->physics->AddToWorld(&body06);
+////
+////	b2ChainShape shape06;
+////	b2Vec2 Vertices06[8];
+////
+////	for (int i = 0; i < 8; i++)
+////	{
+////		Vertices06[i] = PIXEL_TO_METERS(Obj06[i]); ///
+////	}
+////
+////	shape06.CreateChain(Vertices06, 8);
+////
+////	b2FixtureDef fixture06;
+////	fixture06.shape = &shape06;
+////	obj06->CreateFixture(&fixture06);
+////	///
+////
+////	// Static intern objects
+////	/// 7
+////
+////	//b2BodyDef intern07;
+////	//Object07 = App->physics->AddToWorld(&intern07);
+////
+////
+////	b2BodyDef body07;
+////	body07.type = b2_staticBody;
+////	body07.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj07 = App->physics->AddToWorld(&body07);
+////
+////	b2ChainShape shape07;
+////	b2Vec2 Vertices07[8];
+////
+////	for (int i = 0; i < 8; i++)
+////	{
+////		Vertices07[i] = PIXEL_TO_METERS(Obj07[i]); ///
+////	}
+////
+////	shape07.CreateChain(Vertices07, 8);
+////
+////	b2FixtureDef fixture07;
+////	fixture07.shape = &shape07;
+////	obj07->CreateFixture(&fixture07);
+////	///
+////
+////	// Static intern objects
+////	/// 8
+////
+////	//b2BodyDef intern08;
+////	//Object08 = App->physics->AddToWorld(&intern08);
+////
+////
+////	b2BodyDef body08;
+////	body08.type = b2_staticBody;
+////	body08.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+////
+////	b2Body* obj08 = App->physics->AddToWorld(&body08);
+////
+////	b2ChainShape shape08;
+////	b2Vec2 Vertices08[27];
+////
+////	for (int i = 0; i < 27; i++)
+////	{
+////		Vertices08[i] = PIXEL_TO_METERS(Obj08[i]); ///
+////	}
+////
+////	shape08.CreateChain(Vertices08, 27);
+////
+////	b2FixtureDef fixture08;
+////	fixture08.shape = &shape08;
+////	obj08->CreateFixture(&fixture08);
+////	///
+////>>>>>>> master
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -377,6 +738,10 @@ update_status ModuleSceneIntro::Update()
 
 	if (!game_end)
 	{
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+		{
+
+		}
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
@@ -402,6 +767,36 @@ update_status ModuleSceneIntro::Update()
 			circles.getLast()->data->id = 0;
 			circles.getLast()->data->listener = this;
 		}
+
+		// spring (starting to hate it)
+		
+		b2Vec2 pos = spring->body->GetPosition();
+
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_STATE::KEY_REPEAT)
+		{
+			if (METERS_TO_PIXELS(pos.y) < 989 + 40)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 5));
+			}
+			else if (METERS_TO_PIXELS(pos.y) > 989 + 20)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 0));
+			}
+		}
+		else
+		{
+			
+			if (METERS_TO_PIXELS(pos.y) > 989)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, -25));
+			}
+			else
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 0));
+			}
+		}
+		LOG("%i", METERS_TO_PIXELS(pos.y)); 
 
 		// Left fliper 
 

@@ -229,30 +229,32 @@ PhysBody* ModulePhysics::CreateStaticChain(int x, int y, int* points, int size)
 
 void ModulePhysics::CreateSpring(int x, int y)
 {
-	b2DistanceJointDef* the_joint = new b2DistanceJointDef();
-	the_joint->frequencyHz = 1.0f;
-	the_joint->dampingRatio = 1.0f;
-	the_joint->length = PIXEL_TO_METERS(50);
+	b2PrismaticJointDef* the_joint = new b2PrismaticJointDef();
 
-	PhysBody* box_01  = CreateRectangle(x, y + 50, 50, 50);
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(25) * 0.5f);
-
-	b2FixtureDef fixture;
-	fixture.shape = &box;
-	fixture.density = 1.0f;
-
-	b->CreateFixture(&fixture);
-
-
-	the_joint->Initialize(box_01->body, b, b2Vec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)), b2Vec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)));
 	the_joint->collideConnected = true;
-	b2DistanceJoint *joint = (b2DistanceJoint*)world->CreateJoint(the_joint);
+
+
+	PhysBody* box_01 = App->physics->CreateRectangle(100, 100, 50, 50);
+
+	b2BodyDef body_spring;
+	body_spring.type = b2_staticBody;
+	body_spring.position.Set(PIXEL_TO_METERS(100), PIXEL_TO_METERS(120));
+
+	b2Body* b = App->physics->GetWorld()->CreateBody(&body_spring);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(50) * 0.5f, PIXEL_TO_METERS(50) * 0.5f);
+
+	b2FixtureDef fixture_spring;
+	fixture_spring.shape = &box;
+	fixture_spring.density = 1.0f;
+
+	b->CreateFixture(&fixture_spring);
+
+
+	the_joint->Initialize(box_01->body, b, b2Vec2(PIXEL_TO_METERS(605), PIXEL_TO_METERS(976)), b2Vec2(PIXEL_TO_METERS(605), PIXEL_TO_METERS(1003)));
+	the_joint->collideConnected = true;
+	b2PrismaticJoint* joint = (b2PrismaticJoint*)App->physics->GetWorld()->CreateJoint(the_joint);
+
 	
 }
 
