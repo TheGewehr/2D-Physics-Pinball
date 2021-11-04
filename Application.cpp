@@ -87,6 +87,10 @@ update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 	p2List_item<Module*>* item = list_modules.getFirst();
+	
+	start = SDL_GetTicks();
+
+
 
 	while(item != NULL && ret == UPDATE_CONTINUE)
 	{
@@ -112,6 +116,8 @@ update_status Application::Update()
 			ret = item->data->PostUpdate();
 		item = item->next;
 	}
+
+	if ((1000 / FPS) > SDL_GetTicks() - start) SDL_Delay(1000 / FPS - (SDL_GetTicks() - start));
 
 	return ret;
 }
