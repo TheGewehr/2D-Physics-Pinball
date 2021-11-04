@@ -62,6 +62,8 @@ public:
 	uint sadforloosing_fx;
 	uint surprisem_fx;
 
+	bool music_played;
+
 	p2Point<int> ray;
 	bool ray_on;
 

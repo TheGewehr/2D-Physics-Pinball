@@ -594,13 +594,14 @@ bool ModuleSceneIntro::Start()
 
 	// fx
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav");
-	win_fx = App->audio->LoadFx("pinball/win.wav");
+	ball_lost_fx = App->audio->LoadFx("pinball/MMwhatyousay.wav");
+	win_fx = App->audio->LoadFx("pinball/weed.wav");
 	hitmarker_fx = App->audio->LoadFx("pinball/HITMARKER.wav");
 	sonic_fx= App->audio->LoadFx("pinball/SonicEarrape.wav");
 	wasted_fx= App->audio->LoadFx("pinball/GTA-V-WastedBusted-Sound-Effect.wav");
 	sadforloosing_fx= App->audio->LoadFx("pinball/2SAD4ME.wav");
 	surprisem_fx= App->audio->LoadFx("pinball/Suprise-Motherfcker-Sound-Effect.wav");
+
 
 	// Physbody id's
 	// -1 Neutral
@@ -647,7 +648,7 @@ bool ModuleSceneIntro::Start()
 	fliperRight->body->SetType(b2_kinematicBody);
 	fliperRight->id = 5;
 
-
+	music_played=App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg",0.0f);
 
 	return ret;
 }
@@ -670,6 +671,11 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(fliper_left, 164, 908, nullptr, 1, fliperLeft->body->GetAngle() / DEGTORAD, 10, 17);
 	App->renderer->Blit(fliper_right, 331, 905, nullptr, 1, fliperRight->body->GetAngle() / DEGTORAD, 82, 16);
 	
+	if (music_played == false)
+	{
+		music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
+	}
+	else{}
 
 	if (lives == 0) {
 		game_end = true;
@@ -854,6 +860,8 @@ update_status ModuleSceneIntro::Update()
 			win_con = false;
 			game_end = false;
 			lives = 3;
+			Mix_HaltMusic();
+			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
 		}
 	}
 
@@ -874,13 +882,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			lives -= 1;
 			spawn_ball = true;
 
-			if (lives > 0)
+			if (lives ==2)
 			{
 				App->audio->PlayFx(wasted_fx);
 				bodyA->body->SetAwake(false);
 			}
-			else
+			else if(lives == 1)
 			{
+				App->audio->PlayFx(ball_lost_fx);
+				bodyA->body->SetAwake(false);
+			}
+			else if (lives == 0)
+			{
+				Mix_HaltMusic();
 				App->audio->PlayFx(sadforloosing_fx);
 				bodyA->body->SetAwake(false);
 			}
@@ -896,8 +910,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 		else if ((bodyA->id == 0) && (bodyB->id == 2))
 		{
-			App->audio->PlayFx(win_fx);
+			Mix_HaltMusic();
+			music_played = App->audio->PlayMusic("pinball/weed.ogg", 0.0f);
 			bodyA->body->SetAwake(false); //TODO delete the ball and send to win screen
+			
 			win_con = true;
 			game_end = true;
 		}
@@ -923,7 +939,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		else if ((bodyA->id == 0) && (bodyB->id == 6))
 		{
 			App->audio->PlayFx(sonic_fx);
-
 		}
 	}
 	
