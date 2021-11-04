@@ -18,9 +18,8 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
-	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> mapStaticBodies;
+	p2List<PhysBody*> circles;	
+	//p2List<PhysBody*> mapStaticBodies;
 
 	PhysBody* sensor_loss;
 	PhysBody* sensor_win;
@@ -49,7 +48,7 @@ public:
 
 
 	SDL_Texture* circle;
-	SDL_Texture* map;
+	SDL_Texture* Map;
 	SDL_Texture* fliper_left;
 	SDL_Texture* fliper_right;
 
