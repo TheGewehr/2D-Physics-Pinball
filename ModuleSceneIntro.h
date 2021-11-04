@@ -51,6 +51,7 @@ public:
 	SDL_Texture* Map;
 	SDL_Texture* fliper_left;
 	SDL_Texture* fliper_right;
+	SDL_Texture* spring_;
 
 	uint bonus_fx;
 	uint ball_lost_fx;
@@ -70,4 +71,9 @@ public:
 
 	SDL_Rect end_rect;
 	bool spawn_ball;
+
+	int spring_x;
+	int spring_y;
+
+	bool spring_calc;
 };

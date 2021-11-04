@@ -50,8 +50,10 @@ bool ModuleSceneIntro::Start()
 	// spring 
 	spring = App->physics->CreateRectangle(615, 989, 30, 30);
 	spring->body->SetType(b2_kinematicBody);
+	spring_calc = false;
 
-
+	spring_x = 0;
+	spring_y = 0;
 
 	b2Vec2 map_[50] = {
 	{344, 5	  },
@@ -496,6 +498,8 @@ bool ModuleSceneIntro::Start()
 
 	// Textures
 	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
+	spring_ = App->textures->Load("pinball/spring.png");
+
 	
 	fliper_left = App->textures->Load("pinball/leftFliper.png");
 	fliper_right = App->textures->Load("pinball/flipers02.png");
@@ -583,11 +587,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (!game_end)
 	{
-		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
-		{
-
-		}
-
+	
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 		{
 			ray_on = !ray_on;
@@ -595,7 +595,7 @@ update_status ModuleSceneIntro::Update()
 			ray.y = App->input->GetMouseY();
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN /*|| spawn_ball == true*/) // Spawn a ball where it should be ath the start
+		if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN /*|| spawn_ball == true*/) // Spawn a ball where it should be ath the start
 		{
 			circles.add(App->physics->CreateCircle(616, 940, 16));
 			circles.getLast()->data->id = 0;
@@ -622,26 +622,45 @@ update_status ModuleSceneIntro::Update()
 		{
 			if (METERS_TO_PIXELS(pos.y) < 989 + 40)
 			{
-				spring->body->SetLinearVelocity(b2Vec2(0, 5));
+				spring->body->SetLinearVelocity(b2Vec2(0, 1));
 			}
-			else if (METERS_TO_PIXELS(pos.y) > 989 + 20)
+			else if (METERS_TO_PIXELS(pos.y) > 989 + 14)
 			{
 				spring->body->SetLinearVelocity(b2Vec2(0, 0));
 			}
 		}
 		else
 		{
-			
-			if (METERS_TO_PIXELS(pos.y) > 989)
+			if (METERS_TO_PIXELS(pos.y) < 985)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 0));
+			}
+			else if (spring_calc)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 985 - METERS_TO_PIXELS(pos.y) - 5));
+				spring_calc = false;
+			}
+			else if (!spring_calc)
+			{
+				spring->body->SetLinearVelocity(b2Vec2(0, 0));
+				spring_calc = true;
+			}
+
+			/*if (METERS_TO_PIXELS(pos.y) > 989)
 			{
 				spring->body->SetLinearVelocity(b2Vec2(0, -25));
 			}
 			else
 			{
 				spring->body->SetLinearVelocity(b2Vec2(0, 0));
-			}
+				spring_calc
+			}*/
 		}
-		LOG("%i", METERS_TO_PIXELS(pos.y)); 
+
+		LOG("%i", 972 - METERS_TO_PIXELS(pos.y)); 
+		LOG("%i", 972);
+		LOG("%i", METERS_TO_PIXELS(pos.y));
+
 
 		// Left fliper 
 
@@ -747,8 +766,11 @@ update_status ModuleSceneIntro::Update()
 				if (normal.x != 0.0f)
 					App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 			}
-		
-		
+			
+			// Drawing srping
+			spring->GetPosition(spring_x, spring_y);
+			App->renderer->Blit(spring_, spring_x, spring_y);
+			
 	}
 	else if (game_end == true && win_con == true)
 	{
