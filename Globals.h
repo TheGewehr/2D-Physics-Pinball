@@ -29,5 +29,7 @@ enum update_status
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "2D Physics Playground"
+
+#define TITLE "2D Physics Pinball"
+
 #define FPS 60

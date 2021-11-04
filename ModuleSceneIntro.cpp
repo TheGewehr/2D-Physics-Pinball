@@ -457,9 +457,6 @@ bool ModuleSceneIntro::Start()
 	// Static intern objects
 	/// 8
 
-	//b2BodyDef intern08;
-	//Object08 = App->physics->AddToWorld(&intern08);
-
 
 	b2BodyDef body08;
 	body08.type = b2_staticBody;
@@ -482,6 +479,100 @@ bool ModuleSceneIntro::Start()
 	obj08->CreateFixture(&fixture08);
 	///
 
+	// Static intern objects
+	/// 9
+
+
+	b2BodyDef body09;
+	body09.type = b2_staticBody;
+	body09.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* obj09 = App->physics->AddToWorld(&body09);
+
+	b2ChainShape shape09;
+	b2Vec2 Vertices09[27];
+
+	for (int i = 0; i < 27; i++)
+	{
+		Vertices09[i] = PIXEL_TO_METERS(Obj09[i]); ///
+	}
+
+	shape09.CreateChain(Vertices09, 4);
+
+	b2FixtureDef fixture09;
+	fixture09.shape = &shape09;
+	obj09->CreateFixture(&fixture09);
+	///
+
+	// Static intern object Bug 1
+
+	b2BodyDef bug01;
+	bug01.type = b2_staticBody;
+	bug01.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* bugg01 = App->physics->AddToWorld(&bug01);
+
+	b2ChainShape shape10;
+	b2Vec2 Vertices10[3];
+
+	for (int i = 0; i < 3; i++)
+	{
+		Vertices10[i] = PIXEL_TO_METERS(Bug01[i]); ///
+	}
+
+	shape10.CreateChain(Vertices10, 3);
+
+	b2FixtureDef fixture10;
+	fixture10.shape = &shape10;
+	bugg01->CreateFixture(&fixture10);
+
+	// Static intern object Bug 2
+
+	b2BodyDef bug02;
+	bug02.type = b2_staticBody;
+	bug02.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* bugg02 = App->physics->AddToWorld(&bug02);
+
+	b2ChainShape shape11;
+	b2Vec2 Vertices11[3];
+
+	for (int i = 0; i < 3; i++)
+	{
+		Vertices11[i] = PIXEL_TO_METERS(Bug02[i]); ///
+	}
+
+	shape11.CreateChain(Vertices11, 3);
+
+	b2FixtureDef fixture11;
+	fixture11.shape = &shape11;
+	bugg02->CreateFixture(&fixture11);
+
+	// Static intern object Bug 3
+
+	b2BodyDef bug03;
+	bug03.type = b2_staticBody;
+	bug03.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* bugg03 = App->physics->AddToWorld(&bug03);
+
+	b2ChainShape shape12;
+	b2Vec2 Vertices12[3];
+
+	for (int i = 0; i < 3; i++)
+	{
+		Vertices12[i] = PIXEL_TO_METERS(Bug03[i]); ///
+	}
+
+	shape12.CreateChain(Vertices12, 3);
+
+	b2FixtureDef fixture12;
+	fixture12.shape = &shape12;
+	bugg03->CreateFixture(&fixture12);
+	
+	
+	/// //////////////////////
+	
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -507,14 +598,16 @@ bool ModuleSceneIntro::Start()
 
 	// fx
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-	ball_lost_fx = App->audio->LoadFx("pinball/ball_lost.wav");
-	win_fx = App->audio->LoadFx("pinball/win.wav");
+	ball_lost_fx = App->audio->LoadFx("pinball/MMwhatyousay.wav");
+	win_fx = App->audio->LoadFx("pinball/weed.wav");
 	hitmarker_fx = App->audio->LoadFx("pinball/HITMARKER.wav");
 	sonic_fx= App->audio->LoadFx("pinball/SonicEarrape.wav");
 	wasted_fx= App->audio->LoadFx("pinball/GTA-V-WastedBusted-Sound-Effect.wav");
 	sadforloosing_fx= App->audio->LoadFx("pinball/2SAD4ME.wav");
 	surprisem_fx= App->audio->LoadFx("pinball/Suprise-Motherfcker-Sound-Effect.wav");
 
+
+	// Physbody id's
 	// -1 Neutral
 	// 0 Ball
 	// 1 Loose Ball
@@ -522,7 +615,7 @@ bool ModuleSceneIntro::Start()
 	// 3 ricochet
 	// 4 Map, static objects 
 	// 5 flippers
-
+	// 6 sensor out
 	
 
 
@@ -538,6 +631,9 @@ bool ModuleSceneIntro::Start()
 
 	sensor_win = App->physics->CreateRectangleSensor(90, 320, 20, 20);
 	sensor_win->id = 2;
+
+	sensor_out = App->physics->CreateRectangleSensor(530,90, 20, 20);
+	sensor_out->id = 6;
 
 	ricochet01 = App->physics->CreateCircle(254, 270, 47);
 	ricochet01->id = 3;
@@ -556,7 +652,7 @@ bool ModuleSceneIntro::Start()
 	fliperRight->body->SetType(b2_kinematicBody);
 	fliperRight->id = 5;
 
-
+	music_played=App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg",0.0f);
 
 	return ret;
 }
@@ -579,6 +675,11 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(fliper_left, 164, 908, nullptr, 1, fliperLeft->body->GetAngle() / DEGTORAD, 10, 17);
 	App->renderer->Blit(fliper_right, 331, 905, nullptr, 1, fliperRight->body->GetAngle() / DEGTORAD, 82, 16);
 	
+	if (music_played == false)
+	{
+		music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
+	}
+	else{}
 
 	if (lives == 0) {
 		game_end = true;
@@ -781,6 +882,8 @@ update_status ModuleSceneIntro::Update()
 			win_con = false;
 			game_end = false;
 			lives = 3;
+			Mix_HaltMusic();
+			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
 		}
 	}
 
@@ -798,9 +901,26 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		if ((bodyA->id == 0) && (bodyB->id == 1))
 		{
+			lives -= 1;
+			spawn_ball = true;
+
+			if (lives ==2)
+			{
+				App->audio->PlayFx(wasted_fx);
+				bodyA->body->SetAwake(false);
+			}
+			else if(lives == 1)
+			{
+				App->audio->PlayFx(ball_lost_fx);
+				bodyA->body->SetAwake(false);
+			}
+			else if (lives == 0)
+			{
+				Mix_HaltMusic();
+				App->audio->PlayFx(sadforloosing_fx);
+				bodyA->body->SetAwake(false);
+			}
 			
-			App->audio->PlayFx(ball_lost_fx);
-			bodyA->body->SetAwake(false);
 				//bodyA->body->SetActive(false);
 			
 			//TODO delete the ball still does not work, fatal error
@@ -809,13 +929,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			//delete bodyA;
 			
 
-			lives -= 1;
-			spawn_ball = true;
 		}
 		else if ((bodyA->id == 0) && (bodyB->id == 2))
 		{
-			App->audio->PlayFx(win_fx);
+			Mix_HaltMusic();
+			music_played = App->audio->PlayMusic("pinball/weed.ogg", 0.0f);
 			bodyA->body->SetAwake(false); //TODO delete the ball and send to win screen
+			
 			win_con = true;
 			game_end = true;
 		}
@@ -827,7 +947,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			direction = (bodyA->body->GetWorldCenter()) - (bodyB->body->GetWorldCenter()) ; 
 			direction = { direction.x * multi,direction.y * multi };
 			bodyA->body->SetLinearVelocity(direction);
-			App->audio->PlayFx(bonus_fx);
+			App->audio->PlayFx(surprisem_fx);
 			//ApplyForce(direction, bodyA->body->GetWorldCenter(), true);
 
 			//TODO sum points
@@ -837,6 +957,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			App->audio->PlayFx(hitmarker_fx);
 			
+		}
+		else if ((bodyA->id == 0) && (bodyB->id == 6))
+		{
+			App->audio->PlayFx(sonic_fx);
 		}
 	}
 	

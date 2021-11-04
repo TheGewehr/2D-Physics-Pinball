@@ -23,6 +23,7 @@ public:
 
 	PhysBody* sensor_loss;
 	PhysBody* sensor_win;
+	PhysBody* sensor_out;
 	PhysBody* ricochet01;
 	PhysBody* ricochet02;
 	PhysBody* fliperLeft;
@@ -61,6 +62,8 @@ public:
 	uint wasted_fx;
 	uint sadforloosing_fx;
 	uint surprisem_fx;
+
+	bool music_played;
 
 	p2Point<int> ray;
 	bool ray_on;
