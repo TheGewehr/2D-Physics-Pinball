@@ -45,7 +45,9 @@ bool ModuleSceneIntro::Start()
 	94 - 86, 7 - 16
 	};
 
-
+	// winning and losing screens
+	win_screen = { 640, 50, 639, 1085 };
+	lose_screen = { 0, 50, 639, 1085 };
 
 	// spring 
 	spring = App->physics->CreateRectangle(615, 989, 30, 30);
@@ -590,7 +592,7 @@ bool ModuleSceneIntro::Start()
 	// Textures
 	circle = App->textures->Load("pinball/icons8-golf-ball-96 (1).png"); // Ball sprite that does not work
 	spring_ = App->textures->Load("pinball/spring.png");
-
+	win_lose = App->textures->Load("pinball/win_lose.png");
 	
 	fliper_left = App->textures->Load("pinball/leftFliper.png");
 	fliper_right = App->textures->Load("pinball/flipers02.png");
@@ -681,10 +683,7 @@ update_status ModuleSceneIntro::Update()
 	}
 	else{}
 
-	if (lives == 0) {
-		game_end = true;
-		win_con = true;
-	}
+
 
 	if (!game_end)
 	{
@@ -873,12 +872,24 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->Blit(spring_, spring_x, spring_y);
 			
 	}
-	else if (game_end == true && win_con == true)
+	else if (game_end && win_con)
 	{
+		
+		App->renderer->Blit(win_lose, 0, 0, &win_screen);
 
-		App->renderer->DrawQuad(end_rect, 0, 0, 0, 240);
 		if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
 		{
+			win_con = false;
+			game_end = false;
+			lives = 3;
+			Mix_HaltMusic();
+			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
+		}
+	}
+	else if (game_end && !win_con)
+	{
+		App->renderer->Blit(win_lose, 0, 0, &lose_screen);
+		if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN){
 			win_con = false;
 			game_end = false;
 			lives = 3;
@@ -919,6 +930,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				Mix_HaltMusic();
 				App->audio->PlayFx(sadforloosing_fx);
 				bodyA->body->SetAwake(false);
+				win_con = false;
+				game_end = true;
 			}
 			
 				//bodyA->body->SetActive(false);

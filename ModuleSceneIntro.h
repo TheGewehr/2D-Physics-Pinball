@@ -53,6 +53,10 @@ public:
 	SDL_Texture* fliper_left;
 	SDL_Texture* fliper_right;
 	SDL_Texture* spring_;
+	SDL_Texture* win_lose;
+
+	SDL_Rect win_screen;
+	SDL_Rect lose_screen;
 
 	uint bonus_fx;
 	uint ball_lost_fx;
