@@ -23,6 +23,7 @@ public:
 
 	PhysBody* sensor_loss;
 	PhysBody* sensor_win;
+	PhysBody* sensor_out;
 	PhysBody* ricochet01;
 	PhysBody* ricochet02;
 	PhysBody* fliperLeft;
