@@ -16,7 +16,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -28,8 +28,8 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 
-	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-	world->SetContactListener(this);
+	//world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+	//world->SetContactListener(App->physics);
 	// Definition of the arrays
 
 	return true;
@@ -267,8 +267,18 @@ b2World* ModulePhysics::GetWorld()
 // 
 update_status ModulePhysics::PostUpdate()
 {
-	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		debug = !debug;
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		if (debug == true)
+		{
+			debug = false;
+		}
+		else
+		{
+			debug = true;
+		}
+	}
+		
 
 	if(!debug)
 		return UPDATE_CONTINUE;

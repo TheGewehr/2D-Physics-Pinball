@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "Box2D/Box2D/Box2D.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -22,6 +23,9 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading Intro assets");
 	bool ret = true;
+
+	App->physics->world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+	App->physics->world->SetContactListener(App->physics);
 
 	// Vectors for the kinematic chains of the flippers
 	int flipers01[16] = {
@@ -52,6 +56,7 @@ bool ModuleSceneIntro::Start()
 	// spring 
 	spring = App->physics->CreateRectangle(615, 989, 30, 30);
 	spring->body->SetType(b2_kinematicBody);
+	spring->id = 5;
 	spring_calc = false;
 
 	spring_x = 0;
@@ -876,6 +881,17 @@ update_status ModuleSceneIntro::Update()
 	{
 		
 		App->renderer->Blit(win_lose, 0, 0, &win_screen);
+		
+		//Delete balls
+		for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
+		{
+			if (b->GetType() == b2_dynamicBody)
+			{
+				App->physics->world->DestroyBody(b);
+			}
+		}
+		
+		circles.clear();
 
 		if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
 		{
@@ -889,12 +905,25 @@ update_status ModuleSceneIntro::Update()
 	else if (game_end && !win_con)
 	{
 		App->renderer->Blit(win_lose, 0, 0, &lose_screen);
+
+		//Delete balls 
+		for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
+		{
+			if (b->GetType() == b2_dynamicBody)
+			{
+				App->physics->world->DestroyBody(b);
+			}
+		}
+
+		circles.clear();
+		
 		if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN){
 			win_con = false;
 			game_end = false;
 			lives = 3;
 			Mix_HaltMusic();
 			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
+
 		}
 	}
 
