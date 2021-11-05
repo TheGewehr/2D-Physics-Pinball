@@ -630,7 +630,7 @@ bool ModuleSceneIntro::Start()
 	lives = 3;
 	win_con = false;
 	game_end = false;
-	spawn_ball = false;
+	spawn_ball = true;
 	end_rect = { 135, 412, 320, 200 };
 
 	sensor_loss = App->physics->CreateRectangleSensor(300, 1090, 220, 10);
@@ -693,22 +693,24 @@ update_status ModuleSceneIntro::Update()
 	if (!game_end)
 	{
 	
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		{
-			ray_on = !ray_on;
-			ray.x = App->input->GetMouseX();
-			ray.y = App->input->GetMouseY();
-		}
+		//if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		//{
+		//	ray_on = !ray_on;
+		//	ray.x = App->input->GetMouseX();
+		//	ray.y = App->input->GetMouseY();
+		//}
 
-		if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN /*|| spawn_ball == true*/) // Spawn a ball where it should be ath the start
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) // Spawn a ball where it should be ath the start
 		{
-			circles.add(App->physics->CreateCircle(616, 940, 16));
-			circles.getLast()->data->id = 0;
-			circles.getLast()->data->listener = this;
+			if (spawn_ball == true)
+			{
+				circles.add(App->physics->CreateCircle(616, 940, 16));
+				circles.getLast()->data->id = 0;
+				circles.getLast()->data->listener = this;
+
+				spawn_ball = false;
+			}
 			
-
-			//spawn_ball = false;
-
 		}
 
 		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) // Spawn a ball on the mouse
@@ -900,6 +902,7 @@ update_status ModuleSceneIntro::Update()
 			lives = 3;
 			Mix_HaltMusic();
 			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
+			spawn_ball = true;
 		}
 	}
 	else if (game_end && !win_con)
@@ -923,6 +926,7 @@ update_status ModuleSceneIntro::Update()
 			lives = 3;
 			Mix_HaltMusic();
 			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
+			spawn_ball = true;
 
 		}
 	}
