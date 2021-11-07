@@ -983,13 +983,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				game_end = true;
 			}
 			
-				//bodyA->body->SetActive(false);
+			
+			//bodyA->body->SetActive(false);
 			
 			//TODO delete the ball still does not work, fatal error
-			// 
-			//App->physics->GetWorld()->DestroyBody(bodyA->body);
+			delete(bodyA);
+			App->physics->GetWorld()->DestroyBody(bodyA->body);
 			//delete bodyA;
-			
+			spawn_ball = true;
 
 		}
 		else if ((bodyA->id == 0) && (bodyB->id == 2))
