@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleFont.h"
 #include "Box2D/Box2D/Box2D.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -626,7 +627,8 @@ bool ModuleSceneIntro::Start()
 	
 
 
-
+	score = 0;
+	to_sum = 0;
 	lives = 3;
 	win_con = false;
 	game_end = false;
@@ -687,8 +689,9 @@ update_status ModuleSceneIntro::Update()
 		music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
 	}
 	else{}
-
-
+	
+	
+	App->font->DrawText(0, 0, score);
 
 	if (!game_end)
 	{
@@ -903,6 +906,17 @@ update_status ModuleSceneIntro::Update()
 			Mix_HaltMusic();
 			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
 			spawn_ball = true;
+
+			for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
+			{
+				if (b->GetType() == b2_dynamicBody)
+				{
+					App->physics->world->DestroyBody(b);
+				}
+			}
+
+			score = 0;
+			to_sum = 0;
 		}
 	}
 	else if (game_end && !win_con)
@@ -910,13 +924,7 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(win_lose, 0, 0, &lose_screen);
 
 		//Delete balls 
-		for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
-		{
-			if (b->GetType() == b2_dynamicBody)
-			{
-				App->physics->world->DestroyBody(b);
-			}
-		}
+		
 
 		circles.clear();
 		
@@ -928,6 +936,16 @@ update_status ModuleSceneIntro::Update()
 			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
 			spawn_ball = true;
 
+			for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
+			{
+				if (b->GetType() == b2_dynamicBody)
+				{
+					App->physics->world->DestroyBody(b);
+				}
+			}
+
+			score = 0;
+			to_sum = 0;
 		}
 	}
 
@@ -997,7 +1015,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			//ApplyForce(direction, bodyA->body->GetWorldCenter(), true);
 
 			//TODO sum points
+			score++;
 
+			if (score >= 10)
+			{
+				score -= 10;
+				to_sum++;
+			}
 		}
 		else if ((bodyA->id == 0) && (bodyB->id == 5))
 		{

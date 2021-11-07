@@ -4,6 +4,7 @@
 #include "ModuleTextures.h"
 #include "ModuleRender.h"
 #include "ModuleFont.h"
+#include "ModuleSceneIntro.h"
 
 #include<string.h>
 
@@ -25,15 +26,18 @@ bool ModuleFonts::Start()
 
 	fonts.texture = App->textures->Load("pinball/score_font_01.png");
 
-	fonts.columns = 9;
+	fonts.columns = 10;
 	fonts.rows = 4;
 
 	uint tex_w, tex_h;
-	tex_w = 991;
-	tex_h = 481;
-	fonts.char_w = tex_w / fonts.columns;
+	//tex_w = 991;
+	//tex_h = 481;
+	tex_w = 300;
+	tex_h = 35 * 4;
+	fonts.char_w = tex_w / (fonts.columns);
 	fonts.char_h = tex_h / fonts.rows;
 	fonts.totalLength = 10;
+	
 	fonts.table = { "0123456789" };
 
 
@@ -73,10 +77,10 @@ void ModuleFonts::UnLoad(int font_id)
 
 }
 
-void ModuleFonts::DrawText(int x, int y, const char* text) const
+void ModuleFonts::DrawText(int x, int y, int text) const
 {
 	SDL_Rect spriteRect;
-	uint len = 5;
+	uint len = 3;
 
 	spriteRect.w = fonts.char_w;
 	spriteRect.h = fonts.char_h;
@@ -85,21 +89,20 @@ void ModuleFonts::DrawText(int x, int y, const char* text) const
 	{
 		// L9: DONE 2: Find the character in the table and its position in the texture, then Blit
 		uint charIndex = 0;
-
-		// Find the location of the current character in the lookup table
-		for (uint j = 0; j < fonts.totalLength; ++j)
+		if (i == 0)
 		{
-			if (fonts.table[j] == text[i] + 48)
-			{
-				charIndex = j;
-				break;
-			}
-
-
+			charIndex = App->scene_intro->to_sum;
 		}
+		else if (i == 1)
+		{
+			charIndex = text;
+		}
+		else charIndex = 0;
+		// Find the location of the current character in the lookup table
 
 		spriteRect.x = spriteRect.w * (charIndex % fonts.columns);
-		spriteRect.y = spriteRect.h * (charIndex / fonts.columns);
+		spriteRect.y = spriteRect.h * (0 / fonts.columns);
+
 		App->renderer->Blit(fonts.texture, x, y, &spriteRect);
 
 		// Advance the position where we blit the next character

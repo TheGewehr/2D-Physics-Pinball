@@ -14,7 +14,6 @@ struct Font
 {
 	// Lookup table. All characters displayed in the same order as the texture
 	char* table;
-
 	// The font texture
 	SDL_Texture* texture = nullptr;
 
@@ -47,13 +46,14 @@ public:
 	void UnLoad(int fontIndex);
 
 	// Create a surface from text
-	void DrawText(int x, int y, const char* text) const;
+	void DrawText(int x, int y, int text) const;
 
 
 public:
 	// An array to keep track and store all loaded fonts
 	Font fonts;
 
+	
 
 
 };

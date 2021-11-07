@@ -82,5 +82,8 @@ public:
 	int spring_x;
 	int spring_y;
 
+	int score;
+	int to_sum;
+
 	bool spring_calc;
 };
