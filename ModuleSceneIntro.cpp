@@ -58,6 +58,8 @@ bool ModuleSceneIntro::Start()
 	spring = App->physics->CreateRectangle(615, 989, 30, 30);
 	spring->body->SetType(b2_kinematicBody);
 	spring->id = 5;
+
+
 	spring_calc = false;
 
 	spring_x = 0;
@@ -703,7 +705,7 @@ update_status ModuleSceneIntro::Update()
 		//	ray.y = App->input->GetMouseY();
 		//}
 
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) // Spawn a ball where it should be ath the start
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || spawn_ball) // Spawn a ball where it should be ath the start
 		{
 			if (spawn_ball == true)
 			{
@@ -910,6 +912,7 @@ update_status ModuleSceneIntro::Update()
 
 			score = 0;
 			to_sum = 0;
+			spawn_ball = true;
 		}
 	}
 	else if (game_end && !win_con)
@@ -917,11 +920,11 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(win_lose, 0, 0, &lose_screen);
 
 		//Delete balls 
-		
 
 		circles.clear();
 		
 		if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN){
+
 			win_con = false;
 			game_end = false;
 			lives = 3;
@@ -940,6 +943,7 @@ update_status ModuleSceneIntro::Update()
 
 			score = 0;
 			to_sum = 0;
+			spawn_ball = true;
 		}
 	}
 
