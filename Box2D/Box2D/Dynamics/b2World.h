@@ -318,6 +318,8 @@ inline b2Vec2 b2World::GetGravity() const
 	return m_gravity;
 }
 
+
+
 inline bool b2World::IsLocked() const
 {
 	return (m_flags & e_locked) == e_locked;

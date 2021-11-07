@@ -929,14 +929,20 @@ update_status ModuleSceneIntro::Update()
 			music_played = App->audio->PlayMusic("pinball/Wii Music - Gaming Background Music (HD).ogg", 2.0f);
 			spawn_ball = true;
 
-			for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
+			for (int i = 0; i<10; i ++)
 			{
-				if (b->GetType() == b2_dynamicBody)
+				for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
 				{
-					App->physics->world->DestroyBody(b);
-					break;
+					if (b->GetType() == b2_dynamicBody)
+					{
+						App->physics->world->DestroyBody(b);
+						break;
+					}
 				}
 			}
+
+		
+
 
 			score = 0;
 			to_sum = 0;
@@ -964,17 +970,24 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				App->audio->PlayFx(wasted_fx);
 				bodyA->body->SetAwake(false);
+
+				
+				
 			}
 			else if(lives == 1)
 			{
 				App->audio->PlayFx(ball_lost_fx);
 				bodyA->body->SetAwake(false);
+
+
 			}
 			else if (lives == 0)
 			{
 				Mix_HaltMusic();
 				App->audio->PlayFx(sadforloosing_fx);
 				bodyA->body->SetAwake(false);
+
+				
 				win_con = false;
 				game_end = true;
 			}
@@ -993,6 +1006,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			Mix_HaltMusic();
 			music_played = App->audio->PlayMusic("pinball/weed.ogg", 0.0f);
 			bodyA->body->SetAwake(false); //TODO delete the ball and send to win screen
+
 			
 			win_con = true;
 			game_end = true;
