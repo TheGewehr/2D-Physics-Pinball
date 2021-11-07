@@ -1000,8 +1000,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			//bodyA->body->SetActive(false);
 			
 			//TODO delete the ball still does not work, fatal error
-			delete(bodyA);
-			App->physics->GetWorld()->DestroyBody(bodyA->body);
+			//delete(bodyA);
+			
 			//delete bodyA;
 			spawn_ball = true;
 
