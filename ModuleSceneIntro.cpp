@@ -886,15 +886,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		
 		App->renderer->Blit(win_lose, 0, 0, &win_screen);
-		
-		//Delete balls
-		for (b2Body* b = App->physics->world->GetBodyList(); b; b = b->GetNext())
-		{
-			if (b->GetType() == b2_dynamicBody)
-			{
-				App->physics->world->DestroyBody(b);
-			}
-		}
+	
 		
 		circles.clear();
 
@@ -912,6 +904,7 @@ update_status ModuleSceneIntro::Update()
 				if (b->GetType() == b2_dynamicBody)
 				{
 					App->physics->world->DestroyBody(b);
+					break;
 				}
 			}
 
@@ -941,6 +934,7 @@ update_status ModuleSceneIntro::Update()
 				if (b->GetType() == b2_dynamicBody)
 				{
 					App->physics->world->DestroyBody(b);
+					break;
 				}
 			}
 
