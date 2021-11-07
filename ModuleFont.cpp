@@ -80,7 +80,7 @@ void ModuleFonts::UnLoad(int font_id)
 void ModuleFonts::DrawText(int x, int y, int text) const
 {
 	SDL_Rect spriteRect;
-	uint len = 3;
+	uint len = 4;
 
 	spriteRect.w = fonts.char_w;
 	spriteRect.h = fonts.char_h;
@@ -89,11 +89,12 @@ void ModuleFonts::DrawText(int x, int y, int text) const
 	{
 		// L9: DONE 2: Find the character in the table and its position in the texture, then Blit
 		uint charIndex = 0;
-		if (i == 0)
+
+		if (i == 1)
 		{
 			charIndex = App->scene_intro->to_sum;
 		}
-		else if (i == 1)
+		else if (i == 2)
 		{
 			charIndex = text;
 		}
